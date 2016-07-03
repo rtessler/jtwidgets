@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+
+<title>Multilist</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-route.min.js"></script>
+
+</head>
+
+<body ng-app="myApp">
+
+    <section  ng-controller="demoCtrl" class="widgets left">
+
+        <div>
+
+            <a href="#" ng-click="doit()"> click</a>
+
+            <div >{{status}}</div>
+
+        </div>
+
+        <table class="examples">
+            <tr><td class="active"><a href="#listbox">ListBox</a></td></tr>
+            <tr><td><a href="#treeview">TreeView</a></td></tr>
+            <tr><td><a href="#treegrid">TreeGrid</a></td></tr>
+            <tr><td><a href="#checkbox">CheckBox</a></td></tr>
+            <tr><td><a href="#radio">Radiobutton</a></td></tr>
+            <tr><td><a href="#menu">Menu</a></td></tr>
+            <tr><td><a href="#grid">Grid</a></td></tr>
+            <tr><td><a href="#scrollbar">Scrollbar</a></td></tr>
+            <tr><td><a href="#autoscroll">Auto Scroll</a></td></tr>
+            <tr><td><a href="#panel">Panel</a></td></tr>
+            <tr><td><a href="#searchbox">SearchBox</a></td></tr>
+            <tr><td><a href="#dropdown">DropDown</a></td></tr>
+            <tr><td><a href="#supergrid">SuperGrid</a></td></tr>        
+        </table>
+
+    </section>
+
+    <div ng-view></div>
+
+    <script type = "text/ng-template" id = "demo">
+
+        <ul class="examples">
+            <li ng-repeat="e in examples">
+                <a ng-click="runtest(e.op)">{{ e.text }}</a>
+            </li>
+        </ul>
+
+        <div class='widget'></div>
+
+        <table class="ops">
+
+            <tr ng-repeat="o in ops">
+                
+                <td ng-click="runop(o.op)">{{ o.text }}</td>
+
+            </tr>
+
+        </table>
+    </script>
+
+
+<script src="js/app.js"></script>
+<script src="js/demoController.js"></script>
+<script src="js/listboxController.js"></script>
+
+</body>
+</html>

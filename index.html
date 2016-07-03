@@ -1,0 +1,207 @@
+﻿<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>mjTools</title>
+
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+
+    <link rel="shortcut icon" href="images/logo.png">
+
+<style>
+
+/* general stuff */
+
+.left { float: left; }
+.right { float: right; }
+.clear { clear: both; }
+
+/*---------------------------------------------------------------------*/
+/* index.html specific*/
+
+body {
+    margin: 0px;
+    padding: 0px;
+    color: #7f7f7f;
+    font-family:  verdana, sans-serif, "Helvetica Neue Notes";
+    font-weight: normal;
+    font-size: 12px;
+    width: 100%;
+    height: 100%;
+}
+
+.title {
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 10px;
+    font-style: italic;
+    position: relative;
+    top: -5px;
+}
+
+.logo img {
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+header { background: #efefef; border-bottom: 1px solid #333; text-align: center; }
+header a {  padding: 5px; 
+            font-family: verdana;
+            text-decoration: none;
+            color: #333;
+            font-size: 12px; 
+
+}
+
+/*.multilist-demo .box50 {
+    box-sizing: border-box;
+    width: 50%;
+    float: left;
+}*/
+
+.content {
+    width: 100%;
+    /*margin-left: auto;
+    margin-right: auto;*/
+}
+
+.widgets { position: absolute; top: 100px; left: 0px; bottom: 0px; width: 150px; }
+.demo { position: absolute; top: 100px; left: 150px; right: 0px;  }
+
+.widgets table { background: #ee8934; color: #fff; width: 100%; }
+.widgets table td { border-bottom: 1px solid #fff; }
+.widgets table a { color: #fff; text-decoration: none; font-size: 14px; display: block; padding: 5px; }
+.widgets table .active { color: #fff; background: #000; }
+.widgets table td:hover { color: #fff; background: #000; }
+
+.demo-iframe {
+	width: 1000px;
+	height: 700px;
+}
+
+/*.multilist-demo .source-code-panel {
+    position: absolute;
+    left: 49%;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}*/
+
+/*.multilist-demo .source-code-panel .source-code {
+    width: 100%;
+    height: 700px;
+    font-size: 12px;
+}*/
+
+</style>
+
+</head>
+
+<body>
+
+    <header>
+
+        <nav>
+
+            <div class="logo left"><img src="images/logo.png" /><span class='title'>Mulitlist</span></div>
+            <a href="#" class="about right">About</a>
+            <a href="multilist.zip" class="download right">Download</a>
+        
+        </nav>
+
+        <div class="clear"></div>
+
+        <hr />
+
+        <p class="description">A set of light weight jquery plugins for generating lists, grids, buttons and menus. Tested on ie 9, chrome, firefox and safari. 
+            Download from <a href='https://github.com/rtessler/multilistjs' target="_blank">github</a>.        
+        </p>
+
+    </header>
+
+
+    <div class="content">
+
+        <section class="widgets left">
+
+            <table>
+                <tr><td class="active"><a href="#" data-id="tdstbox" data-demo-file="mjListBox.html">ListBox</a></td></tr>
+                <tr><td><a href="#" data-id="treeview" data-demo-file="mjTreeView.html">TreeView</a></td></tr>
+                <tr><td><a href="#" data-id="treegrid" data-demo-file="mjTreeGrid.html">TreeGrid</a></td></tr>
+                <tr><td><a href="#" data-id="checkbox" data-demo-file="mjCheckBox.html">CheckBox</a></td></tr>
+                <tr><td><a href="#" data-id="radiobutton" data-demo-file="mjRadioButton.html">Radiobutton</a></td></tr>
+
+                <tr><td><a href="#" data-id="menu" data-demo-file="mjMenu.html">Menu</a></td></tr>
+                <tr><td><a href="#" data-id="grid" data-demo-file="mjGrid.html">Grid</a></td></tr>
+                <tr><td><a href="#" data-id="scrollbar" data-demo-file="mjScrollBar.html">Scrollbar</a></td></tr>
+                <tr><td><a href="#" data-id="searchbox" data-demo-file="mjAutoScrollBar.html">Auto Scroll</a></td></tr>
+                <tr><td><a href="#" data-id="panel" data-demo-file="mjPanel.html">Panel</a></td></tr>
+
+                <tr><td><a href="#" data-id="searchbox" data-demo-file="mjSearchBox.html">SearchBox</a></td></tr>
+                <tr><td><a href="#" data-id="searchbox" data-demo-file="mjDropDown.html">DropDown</a></td></tr>
+                <tr><td><a href="#" data-id="searchbox" data-demo-file="mjSuperGrid.html">SuperGrid</a></td></tr>
+        
+            </table>
+
+        </section>
+
+
+        <section class="demo">
+
+            <div class="theme"></div>
+
+	        <iframe class="demo-iframe" src="" sandbox="allow-same-origin allow-top-navigation allow-scripts"></iframe>
+
+            <div class="documentation"></div>
+    
+        </section>
+
+<!--        <section class="source-code-panel box50">
+
+	        <textarea class="source-code"></textarea>
+
+        </section>-->
+
+    </div>
+
+<script src="js/libs/jquery-1.11.3.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $(".widgets table a").click(function (e) {
+
+            e.preventDefault();
+
+            //var id = $(this).attr("data-id");
+
+            var file = $(this).attr("data-demo-file");
+
+            $(".widgets td").removeClass("active");
+            $(this).parent().addClass("active");
+
+            $(".demo-iframe").attr("src", "demos/" + file);
+            //$(".source-code").load("demos/" + map[id], function (data) { });
+
+            //$.ajax({
+            //    url: "demos/" + file,
+            //    data: null,
+            //    success: function (d) {
+
+            //        $(".source-code-panel .source-code").text(d);
+            //    },
+            //    dataType: "html"
+            //})
+        });
+
+        $(".widgets table a[data-id='listbox']").click();
+
+    });
+
+</script>
+
+</body>
+
+</html>
