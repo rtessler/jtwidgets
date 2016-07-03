@@ -1,0 +1,41 @@
+﻿.mj-panel .mj-arrow {
+    margin-top: 1px;
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 100%;
+    transition-duration: 0.1s;
+}
+
+.mj-panel .mj-item.mj-header {
+    cursor: pointer;
+    color: #fff;
+    background: #b0b0b0;
+    margin-bottom: 3px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.mj-list {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    overflow: auto;
+}
+
+.mj-list .mj-item { list-style: none;
+                    text-decoration: none; 
+                    text-align: left;
+                    cursor: default; 
+                    outline: none; 
+                    white-space: nowrap;
+                    color: inherit; 
+}
+
+
+/*.mj-panel .mj-rotate-90 {
+    transform: rotate(90deg);
+}
+
+.mj-panel .mj-rotate-0 {
+    transform: rotate(0deg);
+}*/

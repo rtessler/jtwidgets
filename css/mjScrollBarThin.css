@@ -1,0 +1,43 @@
+﻿.mj-scrollbar .mj-scrollbar-pane { overflow: hidden; margin-right: 20px; }
+.mj-scrollbar .mj-scrollbar-slider { position: absolute; top: 0; bottom: 0; right: 0;  width: 14px; background: #efefef; }
+
+.mj-scrollbar .mj-scrollbar-track {
+    position: absolute;
+    top: 22px;
+    bottom: 24px; 
+    margin-left: 1px;
+    width: 12px;
+}
+
+.mj-scrollbar .mj-scrollbar-thumb {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+}
+
+.mj-scrollbar .mj-scrollbar-thumb:hover { background-color: #ccc; }
+
+.mj-scrollbar .mj-scrollbar-thumb.mj-scrollbar-thumb-drag { background: #ccc; }
+
+.mj-scrollbar .mj-arrow {
+    position: absolute;
+    width: 14px;
+    height: 20px;
+}
+
+.mj-scrollbar .mj-arrow-up {    
+    margin-bottom: 1px;
+    top: 0px;
+    border-bottom: 1px solid #ddd;
+}
+
+.mj-scrollbar .mj-arrow:hover { background-color: #ccc; }
+
+.mj-scrollbar .mj-arrow-down {
+    margin-top: 1px;
+    bottom: 0px;
+    border-top: 1px solid #ddd;
+}
+

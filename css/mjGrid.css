@@ -1,0 +1,79 @@
+﻿.mj-grid {
+    width: 100%;
+    height: 100%;
+    max-height: inherit; /* dont use absolute or the grid cant grow in height dynamically */
+    border: 1px solid transparent;
+    overflow: hidden;
+}
+
+.mj-grid .mj-grid-container {
+    position: relative; /* dont use absolute or the grid cant grow in height dynamically */
+    left: 0px;
+    font-size: 11px;
+}
+
+.mj-grid .mj-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd
+}
+
+.mj-grid .mj-table th, .mj-grid .mj-table td {
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.mj-grid .mj-header-cell, .mj-grid .mj-nested-header-cell { 
+    /*position: relative;*/ /* for the sorting icon */
+    box-sizing: border-box;   
+    background: #f3f3f3;
+    padding: 0px;
+}
+
+.mj-grid .mj-cell-content { margin: 0px; padding: 4px;  font-weight: normal; vertical-align: middle; }
+
+.mj-grid .mj-header-cell .mj-cell-content, .mj-grid .mj-nested-header-cell .mj-cell-content {   
+    padding-top: 5px;     
+    padding-bottom: 5px;
+    text-align: center; 
+}
+
+.mj-grid .mj-cell {     
+    box-sizing: border-box;  
+    padding: 0px;
+}
+
+.mj-grid .mj-row-header-cell {
+    height: inherit;    
+    background: #f3f3f3;
+}
+
+.mj-grid .mj-row.mj-selected { background: #F3F1F1; }
+
+.mj-grid .mj-cell.mj-selected { background: #F3F1F1; }
+
+.mj-grid .mj-vertical-scrollbar-container { position: absolute; right: 0px; top: 0px; z-index: 2; }
+
+.mj-grid .mj-horizontal-scrollbar-container { position: absolute; left: 0px; bottom: 0px; z-index: 2; }
+
+.mj-grid .mj-header-cell .mj-arrow-container {
+    float: right;
+    position: relative;
+    margin-top: -10px;
+}
+
+.mj-grid .mj-header-cell .mj-arrow {
+    position: absolute;
+    width: 12px;
+    height: 12px;    
+    right: 2px;
+    top: -6px;
+    bottom: -6px;
+    display: none;
+}
+
+.mj-grid .mj-checkbox-box { display: inline-block; }
+
+.mj-grid .mj-select { border-radius: 5px; outline: none; width: 100%; }
+
+.mj-grid .mj-input { width: 100%; outline: none;  padding: 2px; }

@@ -1,0 +1,18 @@
+﻿.mj-checkbox .mj-checkbox-box { display: inline-block; vertical-align: middle; }
+
+.mj-checkbox .mj-image { margin-left: 3px; margin-right: 3px; vertical-align: middle; }
+
+.mj-checkbox .mj-text { position: relative; display: inline-block; vertical-align: middle; }
+
+.mj-checkbox:not(.mj-disabled):hover .mj-checkbox-box {   
+    -moz-box-shadow: 0 0 2px #aaa;
+    -webkit-box-shadow: 0 0 2px #aaa;
+    box-shadow: 0 0 2px #aaa; 
+
+    -webkit-transition: all 0.1s linear;
+    -o-transition: all 0.1s linear;
+    -moz-transition: all 0.1s linear;
+    -ms-transition: all 0.1s linear;
+    -kthtml-transition: all 0.1s linear;
+    transition: all 0.1s linear;
+}

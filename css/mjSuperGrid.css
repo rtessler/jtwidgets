@@ -1,0 +1,113 @@
+﻿.mj-super-grid { width: 100%; height: 100%; overflow: hidden; }
+
+/* mj-super-grid-table-container contains mj-row-header-table-container and mj-data-table-container */
+
+.mj-super-grid .mj-super-grid-table-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0px;
+}
+
+.mj-super-grid .mj-row-header-table-container {
+    position: relative;
+    z-index: 1; /* when we scroll horizontally we need this */
+    padding: 0px;
+    vertical-align: top;
+}
+
+.mj-super-grid .mj-data-table-container { position: relative; padding: 0px; vertical-align: top; }
+
+/* on firefox and ie if container is set to border-collapse: collapse the borders dissapear border-collapse: separate !important; */
+
+.mj-super-grid table { border-spacing: 0px; font-size: 11px; width: 100%; border-collapse: separate !important; }
+
+/* all cells */
+
+.mj-super-grid .mj-data-table th, 
+.mj-super-grid .mj-data-table td,
+.mj-super-grid .mj-row-header-table th, 
+.mj-super-grid .mj-row-header-table td { 
+    /*border: 1px solid #efefef;*/ 
+    padding: 0px;
+    margin: 0px;   
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 20px;
+    overflow: hidden;
+    font-weight: normal;
+    box-sizing: content-box;
+}
+
+/* header cells */
+
+.mj-super-grid .mj-data-table th, .mj-super-grid .mj-row-header-table th, .mj-super-grid .mj-row-header-table td {
+
+    background: #eee;
+}
+
+.mj-super-grid .mj-super-grid-table {
+    border-left: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+
+.mj-super-grid .mj-row-header-table th {
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd; 
+}
+
+.mj-super-grid .mj-data-table th, .mj-super-grid .mj-row-header-table td {
+    border-bottom: 1px solid #ddd;  
+    border-right: 1px solid #ddd;
+}
+
+.mj-super-grid .mj-data-table td {
+    border-bottom: 1px solid #ddd; 
+    border-right: 1px solid #ddd;
+}
+
+
+.mj-super-grid .mj-text {
+    padding: 5px;
+}
+
+.mj-super-grid .mj-vertical-scrollbar-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+}
+
+.mj-super-grid .mj-horizontal-scrollbar-container {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 2;
+}
+
+/* for sorting change cursor on last header row */
+
+.mj-super-grid .mj-data-table tr:last-child th {
+    cursor: default;
+}
+.mj-super-grid th { position: relative; }
+
+.mj-super-grid th .mj-value { margin-right: 19px; }
+
+.mj-super-grid th .mj-arrow {
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    display: none;
+}
+
+/* last arrow is obscured by scrollbar */
+
+.mj-super-grid th:last-child .mj-arrow {
+    right: 15px;
+}

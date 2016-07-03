@@ -1,0 +1,21 @@
+﻿.mj-radiobutton .mj-image { position: relative; margin-left: 3px; margin-right: 3px; }
+
+.mj-radiobutton .mj-text { padding: 3px; }
+
+.mj-radiobutton:not(.mj-disabled):hover .mj-radio {   
+    -moz-box-shadow: 0 0 2px #aaa;
+    -webkit-box-shadow: 0 0 2px #aaa;
+    box-shadow: 0 0 2px #aaa; 
+
+    -webkit-transition: all 0.1s linear;
+    -o-transition: all 0.1s linear;
+    -moz-transition: all 0.1s linear;
+    -ms-transition: all 0.1s linear;
+    -kthtml-transition: all 0.1s linear;
+    transition: all 0.1s linear;
+}
+
+.mj-radiobutton .mj-radio, .mj-radiobutton .mj-image, .mj-radiobutton .mj-text {
+    display: inline-block;
+    vertical-align: middle;
+}

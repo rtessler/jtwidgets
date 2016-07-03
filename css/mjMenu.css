@@ -1,0 +1,47 @@
+﻿.mj-menu {      /* this is the top level ul element */
+    list-style: none;
+    list-style-type: none;
+    padding: 0;
+    margin: 0; 
+}
+
+.mj-menu ul.mj-submenu {                   /* submenu */
+    position: absolute;
+    display: none;
+    padding: 0;
+    margin: 0;      
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.mj-menu li {
+    list-style: none;
+    background: #fff;
+    line-height: 25px;
+    position: relative;
+
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    text-indent: 0px;  
+}
+
+.mj-menu li.mj-selected { background: #bbb; }
+
+.mj-menu.mj-horizontal > li {     /* top level menu with horizontal items */
+    background-color: #f7f7f7;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    float: left;
+}
+
+.mj-menu .mj-arrow {
+    float: right;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.mj-menu li:hover { background-color: #efefef; }
