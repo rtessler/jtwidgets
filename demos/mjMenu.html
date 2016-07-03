@@ -1,0 +1,224 @@
+﻿<!doctype html>
+<html>
+<head>
+<title>Menu</title>
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjMenu.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        function message(msg) {
+            console.log(msg);
+            $("#status").html(msg);
+        }
+
+        var menudata = [
+                {
+                    id: 1,
+                    text: 'File',                    
+                    items: [{ id: 2, text: 'Open' }, { id: 3, text: '<div class="poodle">Save</div>' }, {
+                        id: 4, text: 'Save As',
+                        items: [{ id: 5, text: "A" },
+                            { id: 6, text: "B", 
+                                items: [{id: 99, text: 99}, {id: 100, text: 100}] }]
+                    }]
+                },
+                { id: 222, text: 'empty'},
+                { id: 7, text: 'Edit', items: [{ id: 8, text: 'Cut' }, { id: 9, text: 'Copy' }, { id: 10, text: 'Paste' }] },
+                { id: 11, text: 'About', items: [{ id: 12, text: 'Contact' }] }
+        ];
+
+        function createMenuHTML() {
+
+            var s = "<ul id='my-menu'>";
+            s += "<li>";
+            s += "File";
+            s += "<ul>";
+            s += "<li><div>open</div></li>";
+            s += "<li>save";
+            s += "<ul>";
+            s += "<li>a</li>";
+            s += "<li>b</li>";
+            s += "<li>c</li>";
+            s += "</ul>";
+            s += "</li>";
+            s += "<li>exit</li>";
+            s += "</ul>";
+            s += "</li>";
+            s += "<li>";
+            s += "Edit";
+            s += "<ul>";
+            s += "<li>Cut</li>";
+            s += "<li>Copy</li>";
+            s += "<li>Paste</li>";
+            s += "</ul>";
+            s += "</li>";
+            s += "<li>";
+            s += "About";
+            s += "</li>";
+            s += "<li>";
+            s += "Contact";
+            s += "</li>";
+            s += "</ul>";
+
+            $("#menu").html(s);
+        }
+
+        // events
+
+        $("#sidepanel ul li a").click(function (e) {
+
+            e.preventDefault();
+
+            $(e.target).parent().parent().find(".active").removeClass("active");
+            $(e.target).addClass("active");
+
+            var id = $(e.target).attr("data-id");
+
+            var options = {};
+
+            switch (id) {
+                case "basic":
+
+                    options = { data: menudata, top_level_item_width: 70, submenu_width: 150 };
+                    break;
+
+                case "vertical":
+
+                    options = { data: menudata, orientation: "vertical", top_level_item_width: 70, submenu_width: 150 };
+                    break;
+
+                case "open-on-click":
+
+                    options = { data: menudata, open_on_click: true };
+                    break;
+
+                case "build-from-html":
+
+                    console.log("im here");
+
+                    //$("#menu").mjMenu("close");
+
+                    createMenuHTML();
+
+                    console.log($("#menu").html());
+                                       
+                    break;
+
+                case "documentation":
+                    break;
+            }
+
+            $("#menu").mjMenu(options);
+
+            $("#menu").on("select", function (e, data) {
+                message(data);
+            });
+        });
+
+        $(".controls a").click(function(e) {
+
+            e.preventDefault();
+
+            var data;
+
+            switch ( $(e.currentTarget).attr("class") )
+            {
+                case "add":
+
+                    data = { id: 88, text: "Ricki Martin", selected: 0, image: "test.png" };
+
+                    $("#menu").mjMenu("add", data);
+                    break;
+
+                case "insert":
+
+                    data = { id: 99, text: "James Blake", selected: 0, image: "test.png" };
+
+                    $("#menu").mjMenu("insert", 5, data);
+                    break;
+
+                case "remove":
+                    
+                    $("#menu").mjMenu("remove", 5);
+                    break;
+
+                case "open":
+
+                    data = [{ id: 88, text: "Ricki Martin", selected: 0, image: "test.png" },
+                            { id: 99, text: "James Blake", selected: 0, image: "test.png" }];
+
+                    $("#menu").mjMenu("refill", data);
+                    break;
+
+                case "clear":
+
+                    $("#menu").mjMenu("clear");
+                    break;
+
+                case "close":
+
+                    $("#menu").mjMenu("close");
+                    break;
+            }
+        });
+
+        $(".basic").click();
+    });
+
+
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div id="sidepanel">
+	    <ul>
+		    <li><a class="basic active" data-id="basic">basic</a></li>
+		    <li><a class="vertical" data-id="vertical">vertical</a></li>
+            <li><a class="open-on-click" data-id="open-on-click">open on click</a></li>
+            <li><a class="build-from-html" data-id="build-from-html">build from existing html</a></li>
+            <li><a class="documentation" data-id="documentation">documentation</a></li>
+	    </ul>
+
+        <h4>functions</h4>
+
+        <ul>
+            <li><a href="#" class="add">add</a></li>
+            <li><a href="#" class="insert">insert</a></li>
+            <li><a href="#" class="remove">remove</a></li>
+            <li><a href="#" class="open">open</a></li>
+            <li><a href="#" class="clear">clear</a></li>
+            <li><a href="#" class="close">close</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+       
+        <div id="menu"></div>
+
+        <div class="clear"></div>
+
+        <p>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque faucibus scelerisque leo, et luctus risus ultrices et. Quisque ultrices risus at dui pharetra laoreet. Pellentesque pulvinar, metus a iaculis fermentum, risus quam adipiscing enim, eu elementum enim velit eget massa. Aenean sit amet semper turpis, vitae pretium lacus. Sed leo felis, sodales ut molestie in, cursus id ante. Curabitur facilisis, tellus sodales dignissim elementum, dui dolor pulvinar tellus, volutpat sollicitudin lectus arcu vitae diam. Duis feugiat blandit suscipit. Curabitur dui urna, fringilla id tempus ut, lacinia sit amet justo. Nam aliquet metus at massa pulvinar, id ultricies leo ultricies. Integer augue velit, adipiscing vitae feugiat vitae, malesuada vitae mauris. Nullam ultrices magna quis eros pharetra euismod. Cras ac orci ac libero porta dapibus non non odio. Cras tempor neque vehicula dui condimentum ultrices.
+        </p>
+
+        <div id="status"></div>
+
+    </div>
+
+</div>  <!-- wrapper -->
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+﻿<!doctype html>
+<html>
+<head>
+<title>mjSuperGrid</title>
+
+<meta name="keywords" content="jquery grid control, grid" /> 
+<meta name="description" content="mjTools supergrid" />
+
+<style>
+
+    .widget { width: 500px; height: 500px; }
+    .source-panel { display: none; }
+    .api-panel { display: none; }
+
+    .range { position: absolute; left: 0; right: 0; top: 0; bottom: 0; padding-left: 5px; line-height: 24px; }
+
+    .range1 { background: #f00; }
+    .range2 { background: #ff0; }
+    .range3 { background: #0f0; }
+    .range4 { background: #0ff; }
+
+</style>
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+<link rel="stylesheet" type="text/css" href="../css/themes/blackAndWhite.css">
+
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjSuperGrid.js" ></script>
+<script src="../js/mjScrollBar.js" ></script>
+
+<script>
+
+$(document).ready(function () {
+
+        var self = this;
+
+        function message(msg) { $(".status").html(msg); }
+
+        function fillFunctionTable(json) {
+
+            $(".op").empty();
+
+            var i = 0;
+
+            while (i < json.length) {
+
+                var tr = $("<tr>");
+
+                for (var j = 0; j < 3 && i < json.length; j++) {
+                    var o = json[i++];
+
+                    var td = $("<td><a href='#' data-op='" + o.op + "' >" + o.text + "</a>");
+                    td.data(o.val);
+
+                    tr.append(td);
+                }
+
+                $(".op").append(tr);
+            }
+
+            rebind();
+        }
+
+
+        $(".examples li").click(function (e) {
+
+            e.preventDefault();
+
+            $(".examples .active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+        function cellFormat(val, y, x) {
+
+            if (x == 2)
+                return "formatted";
+
+            return val;
+        }
+
+        function createData(n, colheader_rowno, rowheader_colno, missing_data) {
+
+            var data = [];
+
+            var prime_ministers = ["whitlam", "frazer", "abbott", "turnbull", "rudd", "gillard", "howard", "hawk"];
+            var musicians = ["prince", "michael jackson", "al dimeola", "brand x", "emerson lake and palmer", "steely dan", "stranglers", "santana", "kate bush"];
+            var companies = ["AGL", "BHP", "Rio Tinto", "State Rail", "Telstra", "Apple", "JP Morgan", "ANZ", "Seven Network"];
+            var cities = ["Sydney", "Cairo", "Istanbul", "New York", "Tokyo", "Sao Paulo", "Cancun", "Rome", "Bergen", "Oslo", "Stockholm", "Copenhagen"];
+            var shapes = ["square", "triangle", "circle", "rhombus", "hexagon", "octogono", "dodecohedron", "star", "pentacle", "oval"];
+            var flowers = ["rose", "petunia", "Chrysanthemum", "tulip", "hydranga", "jonquil", "darnation", "daffodil", "sunflower", "gerbera"];
+            var phrases = ["a bird in the hand is worth two in the bush",
+                "people in glass houses should'nt throw stones",
+                "he who hesitates is lost",
+                "fools rush in where angels fear to tread",
+                "a rolling stone gathers no moss",
+                "beware of greeks bearing gifts",
+                "make hay while the sun shines"];
+
+
+            for (var i = 0; i < colheader_rowno; i++) {
+
+                var arr = [];
+
+                for (var j = 0; j < rowheader_colno; j++)
+                    arr.push("");
+
+                if (i == colheader_rowno -1)
+                    arr = arr.concat(["Prime Minister", "value", "saying", "Musician", "Company", "City", "Shape", "Flower"]);
+                else
+                {
+                    arr = arr.concat(["a", "a", "b", "b", "b", "c", "c", "c"]);
+                }
+                            
+                data.push(arr);
+            }
+
+            var dt = new Date();
+
+            var j = 0;
+
+            for (var i = 0; i < n; i++) {
+
+                var arr = [];
+
+                for (var j = 0; j < rowheader_colno; j++) {
+
+                    if (j == 0)
+                        arr.push(Math.floor(i / 2));
+                    else
+                        arr.push(i);
+                }
+
+                if (missing_data) {
+
+                    arr = arr.concat([
+                        prime_ministers[Math.floor(Math.random() * prime_ministers.length)],
+                        phrases[Math.floor(Math.random() * phrases.length)],
+                        musicians[Math.floor(Math.random() * musicians.length)]
+                    ]);
+                }
+                else {
+
+                    arr = arr.concat([
+                        prime_ministers[Math.floor(Math.random() * prime_ministers.length)],
+                        (Math.random() * 100).toFixed(2),
+                        phrases[Math.floor(Math.random() * phrases.length)],
+                        musicians[Math.floor(Math.random() * musicians.length)],
+                        companies[Math.floor(Math.random() * companies.length)],
+                        cities[Math.floor(Math.random() * cities.length)],
+                        shapes[Math.floor(Math.random() * shapes.length)],
+                        flowers[Math.floor(Math.random() * flowers.length)]
+                    ]);
+                }
+
+                data.push(arr);
+            }
+
+            return data;
+        }
+
+        $(".10000-rows").click(function (e) {
+
+            e.preventDefault();
+
+            var colheader_rowno = 3;
+            var rowheader_colno = 2;
+
+            var data = createData(10000, colheader_rowno, rowheader_colno);
+
+            var options = {
+                data: data,
+                colheader_rowno: colheader_rowno,
+                rowheader_colno: rowheader_colno,
+                //cellFormatter: cellFormat
+            };
+
+            $(".widget").mjSuperGrid(options);
+            //$(".widget").mjSuperGrid("postRender");
+        });
+
+        $(".20-rows").click(function(e) {
+
+            var colheader_rowno = 2;
+            var rowheader_colno = 0;
+
+            var data = createData(20, colheader_rowno, rowheader_colno);
+
+            var options = {
+                data: data,
+                pagesize: 25,
+                colheader_rowno: colheader_rowno,
+                rowheader_colno: 0,
+                columnFormatter: null,
+                cellFormatter: null
+            };
+
+            $(".widget").mjSuperGrid(options);
+        });
+
+
+        $(".missing-data").click(function (e) {
+
+            var colheader_rowno = 2;
+            var rowheader_colno = 0;
+
+            var data = createData(50, colheader_rowno, rowheader_colno, true);
+
+            var options = {
+                data: data,
+                pagesize: 9,
+                colheader_rowno: colheader_rowno,
+                rowheader_colno: rowheader_colno,
+                columnFormatter: null,
+                cellFormatter: null
+            };
+
+            $(".widget").mjSuperGrid(options);
+        });
+
+        $(".set-size").click(function (e) {
+
+            var colheader_rowno = 1;
+            var rowheader_colno = 0;
+
+            var data = createData(20, colheader_rowno, rowheader_colno);
+
+            var options = {
+                data: data,
+                pagesize: 0,
+                colheader_rowno: colheader_rowno,
+                rowheader_colno: rowheader_colno,
+                columnFormatter: null,
+                cellFormatter: null,
+                width: 300,
+                height: 300
+            };
+
+            $(".widget").mjSuperGrid(options);
+        });
+
+        $(".custom-render").click(function (e) {
+
+            e.preventDefault();
+
+            var colheader_rowno = 3;
+            var rowheader_colno = 2;
+
+            var data = createData(10000, colheader_rowno, rowheader_colno);
+
+            function cellRender(val, i, j)
+            {
+                if (j != 3)
+                    return;
+
+                if (val < 25)
+                    str = "<div class='range range1'>" + val + "</div>";
+                else if (val < 50)
+                    str = "<div class='range range2'>" + val + "</div>";
+                else if (val < 75)
+                    str = "<div class='range range3'>" + val + "</div>";
+                else
+                    str = "<div class='range range4'>" + val + "</div>";
+
+                return str;
+            }
+
+            var options = {
+                data: data,
+                colheader_rowno: colheader_rowno,
+                rowheader_colno: rowheader_colno,
+                cellRender: cellRender
+            };
+
+            $(".widget").mjSuperGrid(options);
+        });
+
+
+        function rebind() {
+
+            $(".op a").click(function (e) {
+
+                var op = $(e.currentTarget).attr("data-op");
+
+                console.log("op = " + op);
+
+                var new_data = ["new", "5 days", 99, 99, 99, 1];
+                var e = $(".widget");
+
+                switch (op) {
+                    case "addRow": e.mjSuperGrid("addRow", new_data); break;
+                    case "insertRow": e.mjSuperGrid("insertRow", 5, new_data);  break;
+                    case "deleteRow": e.mjSuperGrid("deleteRow", 5); break;
+                    case "updateRow": e.mjSuperGrid("update-row", new_data); break;
+                    case "updateCell": e.mjSuperGrid("update-cell", 2, 2, "updated"); break;
+                    default: e.mjSuperGrid(op); break;
+
+                }
+            });
+        }
+
+        var new_data = ["new", "5 days", 99, 99, 99, 1];
+
+        var ops = [{ op: 'addRow', text: 'addRow', val: new_data },
+        { op: 'insertRow', text: 'insertRow', val: new_data },
+        { op: 'deleteRow', text: 'deleteRow' },
+        { op: 'updateRow', text: 'updateRow', val: new_data },
+        { op: 'updateCell', text: 'updateCell', val: { x: 2, y: 2, val: "updated" } },
+        { op: "exportToCSV", text: "exportToCSV" }];
+
+        fillFunctionTable(ops);
+
+        $(".10000-rows").trigger("click");
+
+    });
+
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div class="left-panel">
+
+        <br />
+
+	    <ul class=" vertical-menu examples">
+		    <li><a href="#" class="10000-rows active">10000 rows</a></li>
+		    <li><a href="#" class="20-rows">20 rows</a></li>
+            <li><a href="#" class="set-size">set size</a></li>
+            <li><a href="#" class="missing-data">missing data</a></li>
+            <li><a href="#" class="custom-render">custom render</a></li>
+	    </ul>
+
+    </div>
+
+    <div class="right-panel">
+
+        <table class="menu">
+            <tr>
+                <td class="active"><a href="#" data-op="demo">Demo</a></td>
+                <td><a href="#" data-op="source">Source</a></td>
+                <td><a href="#" data-op="api">API</a></td>
+            </tr>
+        </table>
+
+        <div class="content">
+
+            <div class="demo-panel">
+       
+                <div class="widget"></div> 
+
+                <br />
+
+                <div class="status"></div>
+
+                <p>functions</p>
+
+                <table class="op"></table>
+
+            </div>
+
+            <div class="source-panel"></div>
+
+            <div class="api-panel">
+
+                <table class="api-table"></table>
+
+            </div>
+
+        </div>
+
+
+</div>
+
+</body>
+</html>
+
+
+

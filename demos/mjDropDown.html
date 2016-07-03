@@ -1,0 +1,394 @@
+﻿<!doctype html>
+<html>
+<head>
+
+<title>mjDropDown</title>
+
+<meta name="keywords" content="jquery dropdown" /> 
+<meta name="description" content="mjTools dropdown." />
+
+<style>
+
+    .demo .widget { width: 200px; height: 50px; }
+
+    .source-panel { display: none; }
+
+    .api-panel { display: none; }
+
+</style>
+
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjListBox.js"></script>
+<script src="../js/mjDropDown.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../js/libs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+<script src="../js/libs/jquery-ui-1.11.4.custom/jquery-ui.min.js" ></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        function message(msg) { $(".status").html(msg); }
+
+        function fillFunctionTable(json) {
+
+            $(".op").empty();
+
+            var i = 0;
+
+            while (i < json.length) {
+                var tr = $("<tr>");
+
+                for (var j = 0; j < 3 && i < json.length; j++) {
+                    var o = json[i++];
+
+                    var td = $("<td><a href='#' data-op='" + o.op + "' >" + o.text + "</a>");
+                    td.data(o.val);
+
+                    tr.append(td);
+                }
+
+                $(".op").append(tr);
+            }
+        }
+
+        function getData(type) {
+
+            var data;
+
+            switch (type) {
+                case "fruit":
+                    data = [
+                        { text: "Strawberry", },
+                        { text: "Banana", },
+                        { text: "Kiwi", },
+                        { text: "Orange", },
+                        { text: "Tangerine", },
+                        { text: "Fig", selected: true },
+                        { text: "Lime", },
+                        { text: "Apricot" },
+                        { text: "Apple" },
+                        { text: "Mango" },
+                        { text: "Melon" },
+                        { text: "Lime" },
+                        { text: "Apricot" },
+                        { text: "Apple" },
+                        { text: "Tomato" },
+                        { text: "Pear" },
+                        { text: "Mandarine" },
+                        { text: "Lemon" }];
+
+                    break;
+            }
+
+            return data;
+        }
+
+        $(".examples a").click(function (e) {
+
+            e.preventDefault();
+
+            $(".examples .active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+        $(".menu td").click(function (e) {
+
+            e.preventDefault();
+
+            $(".menu td.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+        $(".menu a").click(function (e) {
+
+            e.preventDefault();
+
+            var op = $(e.currentTarget).attr("data-op");
+
+            $(".demo-panel").hide();
+            $(".source-panel").hide();
+            $(".api-panel").hide();
+
+            var api = [
+                        { name: "getItem(id)", description: "" },
+                        { name: "getElement(id)", description: "" },
+                        { name: "search(search_function)", description: "" },
+                        { name: "enableAll()", description: "" },
+                        { name: "disableAll()", description: "" },
+                        { name: "enableItem(id)", description: "" },
+                        { name: "disableItem(id)", description: "" },
+                        { name: "toggle(id)", description: "" },
+                        { name: "checkAll()", description: "" },
+                        { name: "uncheckAll()", description: "" },
+                        { name: "check(id, check_parents)", description: "" },
+                        { name: "uncheck(id)", description: "" },
+                        { name: "checkAt(n)", description: "" },
+                        { name: "uncheckAt(n)", description: "" },
+                        { name: "getChecked()", description: "" },
+                        { name: "halfTick(id)", description: "" },
+                        { name: "halfTickAt(n)", description: "" },
+                        { name: "halfTickAll()", description: "" },
+                        { name: "deselectHalfTicked()", description: "" },
+                        { name: "select(id)", description: "" },
+                        { name: "deselect(id)", description: "" },
+                        { name: "getSelected()", description: "" },
+                        { name: "selectAll()", description: "" },
+                        { name: "deselectAll()", description: "" },
+                        { name: "selectAt(n)", description: "" },
+                        { name: "deselectAt(n)", description: "" },
+                        { name: "toArray()", description: "" },
+                        { name: "sort(callback)", description: "" },
+                        { name: "add(id, data)", description: "" },
+                        { name: "insert(id, data)", description: "" },
+                        { name: "update(id, data)", description: "" },
+                        { name: "remove(id)", description: "" },
+                        { name: "clear()", description: "" },
+                        { name: "close()", description: "" },
+                        { name: "scrollTo(n, animate)", description: "" }];
+
+            switch (op) {
+                case "demo":
+
+                    $(".demo-panel").show();
+                    break;
+
+                case "source":
+
+                    $(".source-panel").show();
+                    break;
+
+                case "api":
+
+                    $(".api-panel").show();
+
+                    var str = "";
+
+                    $.each(api, function (index, o) {
+
+                        str += "<tr><td>" + o.name + "</td></tr>";
+                    });
+
+                    $(".api-table").html(str);
+
+                    break;
+            }
+        });
+
+        // events
+
+        $("#sidepanel ul li a").click(function (e) {
+
+            e.preventDefault();
+
+            $(e.target).parent().parent().find(".active").removeClass("active");
+            $(e.target).addClass("active");
+        });
+
+        function rebind() {
+
+            var ops = [{ op: 'getChecked', text: 'get checked' },
+                       { op: 'getSelected', text: 'get selected' },
+                       { op: 'checkAll', text: 'check all' },
+                       { op: 'uncheckAll', text: 'uncheck all' },
+                       { op: 'selectAll', text: 'selectAll' },
+                       { op: 'deselectAll', text: 'deselect all' },
+                       { op: 'add', text: 'add' },
+
+                       { op: 'select', text: 'select' },
+                       { op: 'insert', text: 'insert' },
+                       { op: 'update', text: 'update' },
+
+                       { op: 'remove', text: 'remove' },
+
+                       { op: 'disable', text: 'disable' },
+                       { op: 'enable', text: 'enable' },
+
+                       { op: 'disableAll', text: 'disable all' },
+                       { op: 'enableAll', text: 'enable all' },
+
+                       { op: 'close', text: 'close' },
+                       { op: 'hasChanged', text: 'hasChanged' },
+
+                       { op: 'scrollTo', text: 'scrollTo' },
+                       { op: 'sort', text: 'sort' }];
+
+            fillFunctionTable(ops);
+
+            var items = getData("fruit");
+
+            $(".basic").click(function (e) {
+
+                $(".widget").mjDropDown({ items: items });
+            });
+
+            $(".checkboxes").click(function (e) {
+
+                items[0].checked = 1;
+                items[2].checked = 1;
+                items[3].checked = 1;
+                items[4].checked = 1;
+
+                $(".widget").mjDropDown({ items: items, type: "checkbox" });
+            });
+
+            $("a[data-op]").click(function (e) {
+
+                e.preventDefault();
+
+                var op = $(this).attr("data-op");
+
+                console.log("op = " + op);
+
+                var selected;
+
+                if ($(".widget").mjDropDown("isCheckable"))
+                    selected = $(".widget").mjDropDown("getChecked");
+                else
+                    selected = $(".widget").mjDropDown("getSelected");
+
+                switch (op) {
+                    case "getChecked":
+                    case "getSelected":
+
+                        var arr = $(".widget").mjDropDown(op);
+                        var checked = [];
+
+                        for (var i = 0; i < arr.length; i++)
+                            checked.push(arr[i].text);
+
+                        message(checked.join());
+                        break;
+
+                    case "add":
+
+                        var data = { id: 99, text: "James Blake", checked: 0, image: "images/test.png" };
+
+                        $(".widget").mjDropDown(op, data);
+                        break;
+
+                    case "insert":
+                    case "update":
+
+                        var data = { id: 99, text: "James Blake", checked: 0, image: "images/test.png" };
+
+                        if (selected.length > 0) {
+
+                            $.each(selected, function (index, o) {
+
+                                $(".widget").mjDropDown(op, o.id, data);
+                            });
+                        }
+
+                        break;
+
+                    case "remove":
+                    case "disable":
+                    case "enable":
+                    case "disable":
+                    case "select":
+                    case "deselect":
+
+                        if (selected.length > 0) {
+
+                            $.each(selected, function (index, o) {
+                                $(".widget").mjDropDown(op, o.id);
+                            });
+                        }
+
+                        break;
+
+                    case "hasChanged":
+
+                        var changed = $(".widget").mjDropDown("hasChanged");
+                        message("changed = " + changed);
+                        break;
+
+                    case "scrollTo":
+
+                        var changed = $(".widget").mjDropDown("scrollTo", 3);
+                        break;
+
+                    default:
+
+                        $(".widget").mjDropDown(op);
+                        break;
+                }
+            });
+        }        
+
+        rebind();
+        $(".basic").click();
+    });
+
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div class="left-panel">
+
+        <br />
+
+	    <ul class="vertical-menu examples">
+            <li><strong>examples</strong></li>
+		    <li><a class="basic active">basic</a></li>
+            <li><a class="checkboxes">checkboxes</a></li>
+	    </ul>
+
+    </div>
+
+    <div class="right-panel">
+
+        <table class="menu">
+            <tr>
+                <td class="active"><a href="#" data-op="demo">Demo</a></td>
+                <td><a href="#" data-op="source">Source</a></td>
+                <td><a href="#" data-op="api">API</a></td>
+            </tr>
+        </table>
+
+        <div class="content">
+
+            <div class="demo-panel">
+
+                <div class="widget"></div>              
+
+                <br />
+
+                <div class="status"></div>
+
+                <p>functions</p>
+
+                <table class="op"></table>
+
+            </div>
+
+            <div class="source-panel"></div>
+
+            <div class="api-panel">
+
+                <table class="api-table"></table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,159 @@
+﻿<!doctype html>
+<html>
+<head>
+<title>mjPanel</title>
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjPanel.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        function message(msg) {
+            console.log(msg);
+            $("#status").html(msg);
+        }        
+
+        // events
+
+        $(".test a").click(function (e) {
+
+            e.preventDefault();
+
+            $(e.target).parent().parent().find(".active").removeClass("active");
+            $(e.target).addClass("active");
+
+            var op = $(e.target).attr("data-op");
+
+            switch (op) {
+                case "basic":
+
+                    $(".panel").mjPanel();
+
+                    $(".panel .motorcycles").mjPanel();
+
+                    break;
+            }
+
+            $(".panel").on("expanded", function (e, data) {
+                message("expanded ");
+                message($(data.e).attr("data-id"));
+            });
+
+            $(".panel").on("collapsed", function (e, data) {
+                message("collapsed ");
+            });
+        });
+
+        $("ul.op a").click(function (e) {
+
+            e.preventDefault();
+
+            var id = 2;
+
+            var op = $(e.currentTarget).attr("data-op");
+
+            switch (op) {
+
+                case "expandAt":
+
+                    $(".panel").mjPanel("expandAt", id);
+                    break;
+
+                case "collapseAt":
+
+                    $(".panel").mjPanel("collapseAt", id);
+                    break;
+
+                default:
+
+                    console.log("op = " + op);
+
+                    var msg = $(".panel").mjPanel(op);
+
+                    message(msg);
+                    break;
+            }
+        });
+
+        $(".basic").click();
+    });
+
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div id="sidepanel">
+
+	    <ul class="test">
+		    <li><a class="basic active" data-op="basic">basic</a></li>
+	    </ul>
+
+        <h4>functions</h4>
+
+        <ul class="op">
+            <li><a href="#" data-op="expandAll">expand all</a></li>
+            <li><a href="#" data-op="collapseAll">collapse all</a></li>
+            <li><a href="#" data-op="expandAt">expand item 2</a></li>
+            <li><a href="#" data-op="collapseAt">collapse item 2</a></li>
+            <li><a href="#" data-op="getExpanded">getExpanded</a></li>
+            <li><a href="#" data-op="close">close</a></li>
+        </ul>
+
+    </div>
+
+    <div class="content">
+
+        <div class="panel">
+
+            <div data-id="cars">cars</div>
+            <div>
+                <div>planes</div>
+                <div>trains</div>
+                <div>automobiles</div>
+            </div>
+
+            <div data-id="planes">planes</div>
+            <div>
+                <div>boeing</div>
+                <div>airbus</div>
+            </div>
+
+            <div data-id="trains">trains</div>
+            <div>
+                <div>ghan</div>
+                <div>orient express</div>
+                <div>tvg</div>
+
+               <div class="motorcycles">
+                    <div>bikes</div>
+                    <div>
+                        <div>Kawasaki</div>
+                        <div>Yamaha</div>
+                        <div>Honda</div>
+                        <div>Suzuki</div>
+                        <div>Harly Davidson</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="status"></div>
+    </div>
+
+</div>  <!-- wrapper -->
+
+</body>
+</html>

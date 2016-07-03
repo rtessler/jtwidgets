@@ -1,0 +1,204 @@
+﻿<!doctype html>
+<html>
+<head>
+<title>mjAutoScrollBar</title>
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjAutoScrollBar.js" ></script>
+
+<style>
+
+    .demo .widget { width: 200px; height: 250px; overflow: hidden; }
+
+    .vertical-scrollbar-container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 200px;
+        height: 250px;
+        background-color: red;
+    }
+
+    .horizontal-scrollbar-container {
+        width: 200px;
+        background-color: red;
+    }
+
+    .source-panel { display: none; }
+
+    .api-panel { display: none; }
+
+</style>
+
+<script>
+
+    $(document).ready(function () {
+
+        var self = this;
+
+        function message(msg) { $(".status").html(msg); }
+
+        function fillFunctionTable(json) {
+
+            $(".op").empty();
+
+            var i = 0;
+
+            while (i < json.length) {
+                var tr = $("<tr>");
+
+                for (var j = 0; j < 3 && i < json.length; j++) {
+                    var o = json[i++];
+
+                    var td = $("<td><a href='#' data-op='" + o.op + "' >" + o.text + "</a>");
+                    td.data(o.val);
+
+                    tr.append(td);
+
+                }
+
+                $(".op").append(tr);
+            }
+
+            rebind();
+        }
+
+        function getOps() {
+
+            return [{ op: 'get', text: 'get' },
+                        { op: 'set', text: 'set' },
+                        { op: 'close', text: 'close' }];
+        }
+
+        function rebind() {
+
+            $(".op a").click(function (e) {
+
+                e.preventDefault();
+
+                var op = $(e.currentTarget).attr("data-op");
+
+                message(op);
+
+                switch (op) {
+
+                    case "get":
+
+                        var val = $(".widget").mjAutoScrollBar(op);
+                        message("get val:" + val);
+                        break;
+
+                    case "set":
+
+                        $(".widget").mjAutoScrollBar(op, 50);
+                        message("set val: 50");
+                        break;
+
+                    default:
+
+                        $(".widget").mjAutoScrollBar(op);
+                        break;
+                }
+            });
+
+        }
+
+        function createData() {
+
+            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec fringilla nulla, at tempus lectus. In eget dolor id eros commodo aliquam. Maecenas vitae suscipit urna. In felis neque, luctus vel neque id, convallis aliquam velit. Curabitur tristique lectus egestas lorem venenatis, a bibendum dui condimentum. Etiam scelerisque arcu non elit facilisis, non egestas libero tristique. Fusce dolor lorem, vulputate semper mollis vel, congue sit amet mauris. Quisque tincidunt elit ac diam egestas tempor. Phasellus condimentum augue nec quam hendrerit dignissim. Vivamus eget nisl ac quam convallis porta. Curabitur sit amet tempus erat. Nulla viverra finibus congue. Maecenas velit ante, dignissim a diam a, efficitur accumsan metus. Praesent eu mattis magna, in efficitur felis. Integer aliquet quis lacus non elementum. In eu eros elit. Nulla consequat, mi hendrerit molestie tempus, quam lorem dignissim ligula, id eleifend purus ligula a elit. Mauris a tempor dolor. Donec viverra ac dolor ut blandit. Sed congue nulla sed est aliquet, ut sollicitudin elit tincidunt. Praesent dictum tristique purus, vitae ultrices eros imperdiet vel. Vestibulum a pharetra lectus, eu vulputate massa. Ut metus turpis, tincidunt et turpis nec, pretium pretium orci. Maecenas ultricies eu neque at luctus. Proin vitae venenatis diam, ut bibendum elit. Vestibulum a est non est pulvinar auctor non ac quam. Fusce tempus odio at interdum dapibus. Nullam fermentum egestas turpis, a varius risus facilisis ac. Maecenas eu vehicula purus, non ultricies nisi. Nullam ullamcorper diam sit amet quam facilisis mattis. Aenean a semper ex. Vivamus nunc urna, euismod in luctus eget, ullamcorper sit amet nulla. Fusce non quam quis odio porta imperdiet at vel lacus. Nulla consequat metus sed tortor porta, eu convallis ex pretium. Maecenas eu est pulvinar, pharetra massa vitae, vehicula nisi. Fusce vestibulum mollis ante sed semper. Duis porta auctor scelerisque. Sed dictum lectus a dictum ornare. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce lacinia tellus nisi. Vestibulum eget faucibus orci, vitae sagittis lacus. Suspendisse et libero lorem. Duis et feugiat justo. Ut ac turpis id augue tincidunt facilisis non sed nunc. Praesent sed dignissim ante, vel iaculis diam. Curabitur suscipit dignissim tellus vel maximus. Morbi tortor neque, faucibus eu arcu non, iaculis vestibulum turpis. Mauris ut dapibus sem. Nunc consequat, ante ac tristique iaculis, massa arcu molestie ante, eu rhoncus sem dui sed felis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac pharetra ligula. Morbi et aliquam ex, id vehicula eros. Fusce a nulla bibendum, commodo turpis ac, consectetur quam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec tempus ultrices ipsum, et ultricies turpis convallis at. Aliquam finibus bibendum quam ac suscipit. Aenean suscipit justo at turpis tristique vulputate. Maecenas ac ultricies dui, at placerat augue. Etiam tempus lacinia fringilla. Curabitur consequat a massa et dignissim. Aliquam tellus ipsum, dictum ac massa tincidunt, imperdiet imperdiet neque. Proin sed ullamcorper massa. In bibendum facilisis nisl, quis suscipit turpis venenatis bibendum. Vivamus sit amet posuere nulla. Quisque sit amet quam efficitur nisi sagittis aliquet. Vestibulum turpis enim, porttitor at viverra a, egestas a tortor.";
+        }
+
+        $(".examples li").click(function (e) {
+
+            e.preventDefault();
+
+            $(".examples li.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+      
+        $(".auto-scroll").click(function (e) {
+
+            e.preventDefault();
+
+            var data = createData();
+            var ops = getOps();
+            fillFunctionTable(ops);
+
+            $(".widget").html(data);
+
+            $(".widget").mjAutoScrollBar("close");
+
+            $(".widget").mjAutoScrollBar({ value: 0, min: 0, max: 150, auto_scroll: true });
+
+            $(".widget").on("valueChange", function (e, o) { message(o); });
+        });
+
+        $(".auto-scroll").trigger("click");
+    });
+
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div class="left-panel">
+
+        <br />
+
+	    <ul class="vertical-menu examples">
+            <li><strong>examples</strong></li>
+            <li><a href="#" class="auto-scroll">auto scroll content</a></li>                       
+	    </ul>
+
+    </div>
+
+    <div class="right-panel">
+
+        <table class="menu">
+            <tr>
+                <td class="active"><a href="#" data-op="demo">Demo</a></td>
+                <td><a href="#" data-op="source">Source</a></td>
+                <td><a href="#" data-op="api">API</a></td>
+            </tr>
+        </table>
+
+        <div class="demo-panel">
+
+            <div class="content"> 
+            
+                <div class="widget"></div>   
+                <div class="vertical-scrollbar-container"></div>
+                <div class="horizontal-scrollbar-container"></div>
+
+                <div class="status"></div>
+
+                <p>functions</p>
+
+                <table class="op"></table>
+
+            </div>
+
+        </div>
+
+        <div class="source-panel"></div>
+
+        <div class="api-panel">
+
+            <table class="api-table"></table>
+
+        </div>
+
+    </div>
+
+</div> 
+
+</body>
+</html>

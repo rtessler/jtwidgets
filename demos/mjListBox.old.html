@@ -1,0 +1,649 @@
+﻿<!doctype html>
+<html>
+<head>
+
+<title>ListBox</title>
+
+<meta name="keywords" content="jquery tree control, tree" /> 
+<meta name="description" content="mjTools treegrid." />
+
+<style>
+
+    .demo .widget { width: 500px; height: 250px; }
+
+    .searchbox { width: 500px; }
+
+    .searchbox .mj-searchbox input { border-radius: 0px; }
+
+    .source-panel { display: none; }
+
+    .api-panel { display: none; }
+
+</style>
+
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjListBox.js"></script>
+<script src="../js/mjSearchBox.js"></script>
+<script src="../js/mjScrollBar.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="../js/libs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+<script src="../js/libs/jquery-ui-1.11.4.custom/jquery-ui.min.js" ></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        function message(msg) { $(".status").html(msg); }
+
+        function fillFunctionTable(json) {
+
+            $(".op").empty();
+
+            var i = 0;
+
+            while (i < json.length) {
+                var tr = $("<tr>");
+
+                for (var j = 0; j < 3 && i < json.length; j++) {
+                    var o = json[i++];
+
+                    var td = $("<td><a href='#' data-op='" + o.op + "' >" + o.text + "</a>");
+                    td.data(o.val);
+
+                    tr.append(td);
+                }
+
+                $(".op").append(tr);
+            }
+        }
+
+        function getData(type) {
+
+            var items = [];
+
+            switch (type) {
+                case "fruit":
+                    items = [
+                        { text: "Strawberry", },
+                        { text: "Banana", },
+                        { text: "Kiwi", },
+                        { text: "Orange", },
+                        { text: "Tangerine", },
+                        { text: "Fig", },
+                        { text: "Lime", },
+                        { text: "Apricot" },
+                        { text: "Apple" },
+                        { text: "Mango" },
+                        { text: "Melon" },
+                        { text: "Lime" },
+                        { text: "Apricot" },
+                        { text: "Apple" },
+                        { text: "Tomato" },
+                        { text: "Pear" },
+                        { text: "Mandarine" },
+                        { text: "Lemon" }];
+
+                    break;
+
+                case "music":
+
+                    items = [
+                        { text: "Michael Jackson", checked: 0, image: "images/test.png" },
+                        { text: "Katie Perry", checked: 0, image: "images/test.png", disabled: true },
+                        { text: "Rhianna", checked: 1, image: "images/test.png", disabled: true },
+                        { text: "Geoff Buckley", checked: 1, image: "images/test.png" },
+                        { text: "Amy Winehouse", checked: 0, image: "images/test.png" },
+                        { text: "Jimi Hendrix", checked: 0, image: "images/test.png" },
+                        { text: "Wolfgang Amedeus Mozart", checked: 0, image: "images/test.png" },
+                        { text: "Daft Punk", checked: 0, image: "images/test.png" },
+                        { text: "Dead Maus", checked: 1, image: "images/test.png" }];
+                    break;
+
+                case "color":
+
+                    items = [
+                        { text: "White", checked: 0 },
+                        { text: "Black", checked: 0, disabled: true },
+                        { text: "Red", checked: 0 },
+                        { text: "Green", checked: 1 },
+                        { text: "Blue", checked: 2 },
+                        { text: "Yellow", checked: 0 },
+                        { text: "Orange", checked: 0 },
+                        { text: "Grey", checked: 0 },
+                        { text: "Purple", checked: 0 },
+                        { text: "Magenta", checked: 0 },
+                        { text: "Brown", checked: 0 }];
+                    break;
+
+                case "half-ticked-list":
+                    items = [
+                        { text: "White", checked: 2 },
+                        { text: "Black", checked: 2 },
+                        { text: "Red", checked: 2 },
+                        { text: "Green", checked: 2 },
+                        { text: "Blue", checked: 2 },
+                        { text: "Yellow", checked: 2 },
+                        { text: "Orange", checked: 2 },
+                        { text: "Grey", checked: 2 },
+                        { text: "Purple", checked: 2 },
+                        { text: "Magenta", checked: 2 },
+                        { text: "Brown", checked: 2 }];
+                    break;
+
+                case "countries":
+
+                    items = [
+                           { text: "Europe", image: 'images/test.png' },
+                           { text: "Spain", image: 'images/test.png' },
+                           { text: "France", image: 'images/test.png' },
+                           { text: "Germany", image: 'images/test.png' },
+                           { text: "Italy", image: 'images/test.png' },
+                           { text: "Switzerland", image: 'images/test.png' },
+                           { text: "England", image: 'images/test.png' },
+                           { text: "Portugal", image: 'images/test.png' },
+                           { text: "Austria", image: 'images/test.png' }
+                    ];
+                    break;
+
+                case "cars":
+                    items = [{ text: "toyota" }, { text: "mazda" }, { text: "audi", checked: 1 }, { text: "landrover" }, { text: "jaguar" }, { text: "porsche" }, { text: "audi" }, { text: "fiat" }];
+                    break;
+
+                case "long-text":
+
+                    items = [{ image: 'images/julia-roberts.jpg', text: "This life, which had been the tomb of his virtue and of his honour, is but a walking shadow; a poor player, that struts and frets his hour upon the stage, and then is heard no more: it is a tale told by an idiot, full of sound and fury, signifying nothing." },
+                        { image: 'images/shakespere.jpg', text: "If you prick us do we not bleed? If you tickle us do we not laugh? If you poison us do we not die? And if you wrong us shall we not revenge?" },
+                        { image: 'images/monica-bellucci.jpg', text: "All the world's a stage, and all the men and women merely players: they have their exits and their entrances; and one man in his time plays many parts, his acts being seven ages" },
+                        { image: 'images/eva-mendes.jpg', text: "Do not go gentle into that good night. Old age should burn and rave at close of day; Rage, rage against the dying of the light. Though wise men at their end know dark is right" }];
+                    break;
+
+
+                case "big-data":
+
+                    for (var i = 0; i < 10000; i++)
+                        items.push({ text: "row" + String(i) });
+
+                    break;
+            }
+
+            return items;
+        }
+
+        $(".examples li").click(function (e) {
+
+            e.preventDefault();
+
+            $(".examples li.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+        $(".menu td").click(function (e) {
+
+            e.preventDefault();
+
+            $(".menu td.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+        $(".menu a").click(function (e) {
+
+            e.preventDefault();
+
+            var op = $(e.currentTarget).attr("data-op");
+
+            $(".demo-panel").hide();
+            $(".source-panel").hide();
+            $(".api-panel").hide();
+
+            var api = [
+                        { name: "getItem(id)", description: "" },
+                        { name: "getElement(id)", description: "" },
+                        { name: "search(search_function)", description: "" },
+                        { name: "enableAll()", description: "" },
+                        { name: "disableAll()", description: "" },
+                        { name: "enableItem(id)", description: "" },
+                        { name: "disableItem(id)", description: "" },
+                        { name: "toggle(id)", description: "" },
+                        { name: "checkAll()", description: "" },
+                        { name: "uncheckAll()", description: "" },
+                        { name: "check(id, check_parents)", description: "" },
+                        { name: "uncheck(id)", description: "" },
+                        { name: "checkAt(n)", description: "" },
+                        { name: "uncheckAt(n)", description: "" },
+                        { name: "getChecked()", description: "" },
+                        { name: "halfTick(id)", description: "" },
+                        { name: "halfTickAt(n)", description: "" },
+                        { name: "halfTickAll()", description: "" },
+                        { name: "deselectHalfTicked()", description: "" },
+                        { name: "select(id)", description: "" },
+                        { name: "deselect(id)", description: "" },
+                        { name: "getSelected()", description: "" },
+                        { name: "selectAll()", description: "" },
+                        { name: "deselectAll()", description: "" },
+                        { name: "selectAt(n)", description: "" },
+                        { name: "deselectAt(n)", description: "" },
+                        { name: "toArray()", description: "" },
+                        { name: "sort(callback)", description: "" },
+                        { name: "add(id, data)", description: "" },
+                        { name: "insert(id, data)", description: "" },
+                        { name: "update(id, data)", description: "" },
+                        { name: "remove(id)", description: "" },
+                        { name: "clear()", description: "" },
+                        { name: "close()", description: "" },
+                        { name: "scrollTo(n, animate)", description: "" }];
+
+            switch (op) {
+                case "demo":
+
+                    $(".demo-panel").show();
+                    break;
+
+                case "source":
+
+                    $(".source-panel").show();
+                    break;
+
+                case "api":
+
+                    $(".api-panel").show();
+
+                    var str = "";
+
+                    $.each(api, function (index, o) {
+
+                        str += "<tr><td>" + o.name + "</td></tr>";
+                    });
+
+                    $(".api-table").html(str);
+
+                    break;
+            }
+        });
+
+        // events
+
+        $("#sidepanel ul li a").click(function (e) {
+
+            e.preventDefault();
+
+            $(e.target).parent().parent().find(".active").removeClass("active");
+            $(e.target).addClass("active");
+        });
+
+        function rebind() {
+
+            $("a[data-op]").click(function (e) {
+
+                e.preventDefault();
+
+                var op = $(this).attr("data-op");
+
+                console.log("op = " + op);
+
+                var selected;
+
+                if ($(".widget").mjListBox("isCheckable"))
+                    selected = $(".widget").mjListBox("getChecked");
+                else
+                    selected = $(".widget").mjListBox("getSelected");
+
+                switch (op) {
+                    case "getChecked":
+                    case "getSelected":
+
+                        var arr = $(".widget").mjListBox(op);
+                        var checked = [];
+
+                        for (var i = 0; i < arr.length; i++)
+                            checked.push(arr[i].text);
+
+                        message(checked.join());
+                        break;
+
+                    case "add":
+
+                        var data = { text: "James Blake", checked: 0, image: "images/test.png" };
+
+                        $(".widget").mjListBox(op, data);
+                        break;
+
+                    case "insert":
+                    case "update":
+
+                        var data = { text: "James Blake", checked: 0, image: "images/test.png" };
+
+                        if (selected.length > 0) {
+
+                            $.each(selected, function (index, o) { $(".widget").mjListBox(op, o.id, data); });
+                        }
+
+                        break;
+
+                    case "remove":
+                    case "disable":
+                    case "enable":
+                    case "disable":
+                    case "select":
+                    case "deselect":
+
+                        if (selected.length > 0) {
+
+                            $.each(selected, function (index, o) { $(".widget").mjListBox(op, o.id); });
+                        }
+
+                        break;
+
+                    case "hasChanged":
+
+                        var changed = $(".widget").mjListBox("hasChanged");
+                        message("changed = " + changed);
+                        break;
+
+                    case "scrollTo":
+
+                        var changed = $(".widget").mjListBox("scrollTo", 3);
+                        break;
+
+                    default:
+
+                        $(".widget").mjListBox(op);
+                        break;
+                }
+            });
+        }
+
+
+        $(".basic").click(function (e) {
+
+            var items = getData("fruit");
+            $(".widget").mjListBox({ items: items, type: "text" });
+        });
+
+        $(".checklist").click(function (e) {
+
+            var items = getData("music");
+            $(".widget").mjListBox({ items: items, type: "checkbox" });
+        });
+
+        $(".radiolist").click(function (e) {
+
+            var items = getData("color");
+            $(".widget").mjListBox({ items: items, type: "radiobutton" });
+        });
+
+        $(".imagelist").click(function (e) {
+
+            var items = [
+            { id: 1, text: "<i>beyonce</i>", image: "images/beyonce.jpg" },
+            { id: 2, text: "<b>britany</b>", image: "images/britany.jpg", checked: 1 },
+            { id: 3, text: "<i>rhianna</i>", image: "images/rhianna.jpg", checked: false }
+            ];
+
+            $(".widget").mjListBox({ items: items, type: "checkbox" });
+        });
+
+        $(".bigdata").click(function (e) {
+
+            var items = [];
+
+            message("building data");
+
+            for (var i = 0; i < 3000; i++) { items.push({ id: i, text: String(i) }); }
+
+            message("filling list");
+
+            $(".widget").mjListBox({ items: items, type: "checkbox" });
+
+            message("finished");
+            //bindEvents();
+        });
+
+        $(".filter").click(function (e) {
+
+            var items = getData("countries");
+
+            $(".widget").mjListBox({ items: items, type: 'checkbox' });
+
+            $(".widget").on("checkChange", function (e, d) { message("id: " + d.id + " " + d.text + " checked = " + d.checked); });
+
+            $(".searchbox").mjSearchBox();
+
+            $(".searchbox").on("mjKeyup", function (e, str) {
+
+                message("keyup: " + str);
+
+                var arr = [];
+
+                str = str.toLowerCase();
+
+                for (var i = 0; i < items.length; i++) {
+                    var o = items[i];
+
+                    if (o.text.toLowerCase().indexOf(str) >= 0)
+                        arr.push(o);
+                }
+
+                $(".widget").mjListBox({ items: arr, type: 'checkbox' });
+            });
+
+            $(".searchbox").on("search", function (e, data) { message("search: " + data); });
+        });
+
+        $(".custom-render").click(function (e) {
+
+            function itemRender(o) {
+                var str = "<a href='#' class='apply' data-id='" + o.id + "' style='width: 100px; display: inline-block; vertical-align: middle; text-decoration: none; color: #000; line-height: 12px;'>" + o.text + "</a>";
+                str += "<a href='#' class='edit' data-id='" + o.id + "' style='display: inline-block; vertical-align: middle;'><img src='images/edit.png' style='height: 15px;'/></a>";
+                str += "<a href='#' class='delete' data-id='" + o.id + "' style='display: inline-block; vertical-align: middle;'><img src='images/delete.png' style='height: 15px;'/></a>";
+
+                return str;
+            }
+
+            var items = [
+                           { id: 1, text: "Documents" },
+                           { id: 2, text: "Images", disabled: true },
+                           { id: 3, text: "Videos", selected: 1 },
+                           { id: 4, text: "Music" },
+                           { id: 6, text: "Projects" }
+            ];
+
+            $(".widget").mjListBox({ items: items, itemRenderFunction: itemRender });
+
+            $(".widget .apply").click(function (e) {
+
+                var id = $(e.currentTarget).attr("data-id");
+                var o = $(".widget").mjListBox("getItem", id);
+
+                message("apply " + o.text);
+            });
+
+            $(".widget .edit").click(function (e) {
+
+                var id = $(e.currentTarget).attr("data-id");
+                var o = $(".widget").mjListBox("getItem", id);
+
+                message("edit " + o.text);
+            });
+
+            $(".widget .delete").click(function (e) {
+
+                var id = $(e.currentTarget).attr("data-id");
+                var o = $(".widget").mjListBox("getItem", id);
+
+                message("delete " + o.text);
+            });
+
+        });
+
+        $(".long-text").click(function (e) {
+
+            var items = getData("long-text");
+
+            //$(".widget").mjListBox({ items: items, type: "checkbox", wrap_text: true });
+            $(".widget").mjListBox({ items: items, type: "checkbox", max_text_width: 330 });
+            //$(".widget").mjListBox({ items: items, type: "checkbox" });
+        });
+
+        $(".dragdrop").click(function (e) {
+
+            var items = getData("fruit");
+            $(".widget").mjListBox({ items: items, dragdrop: true });
+        });
+
+        $(".horizontal").click(function (e) {
+
+            var items = getData("cars");
+            $(".widget").mjListBox({ items: items, type: "radiobutton", horizontal: true });
+        });
+
+        $(".half-ticked-list").click(function (e) {
+
+            var items = getData("half-ticked-list");
+            $(".widget").mjListBox({ items: items, type: "checkbox" });
+
+            $(".widget").on("checkChange", function (e, data) {
+
+                var checked = $(".widget").mjListBox("getChecked");
+
+                if (checked.length == 0)
+                    $(".widget").mjListBox("halfTickAll");
+                else
+                    $(".widget").mjListBox("uncheckHalfTicked");
+            });
+        });
+
+        $(".virtual-mode").click(function (e) {
+
+            var items = getData("big-data");
+            $(".widget").mjListBox({ items: items, type: "checkbox", virtual_mode: true, page_size: 12 });
+        });
+
+        $(".error-test").click(function (e) {
+
+            console.log("error test");
+
+            var res = $(".non-widget").mjListBox("getItems");
+
+            console.log(res);
+
+        });
+
+        function setup() {
+            var ops = [{ op: 'getChecked', text: 'get checked' },
+                       { op: 'getSelected', text: 'get selected' },
+                       { op: 'checkAll', text: 'check all' },
+                       { op: 'uncheckAll', text: 'uncheck all' },
+                       { op: 'selectAll', text: 'selectAll' },
+                       { op: 'deselectAll', text: 'deselect all' },
+                       { op: 'add', text: 'add' },
+
+                       { op: 'select', text: 'select' },
+                       { op: 'insert', text: 'insert' },
+                       { op: 'update', text: 'update' },
+
+                       { op: 'remove', text: 'remove' },
+
+                       { op: 'disable', text: 'disable' },
+                       { op: 'enable', text: 'enable' },
+
+                       { op: 'disableAll', text: 'disable all' },
+                       { op: 'enableAll', text: 'enable all' },
+
+                       { op: 'close', text: 'close' },
+                       { op: 'hasChanged', text: 'hasChanged' },
+
+                       { op: 'scrollTo', text: 'scrollTo' },
+                       { op: 'sort', text: 'sort' }];
+
+            fillFunctionTable(ops);
+        }
+
+        setup();
+        rebind();
+
+        $(".basic").click();
+    });
+
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div class="left-panel">
+
+        <br />
+
+	    <ul class="vertical-menu examples">
+            <li><strong>examples</strong></li>
+		    <li><a class="basic" class="active">basic</a></li>
+		    <li><a class="checklist">check list</a></li>
+		    <li><a class="radiolist">radio button list</a></li>
+		    <li><a class="imagelist">image list</a></li>            
+            <li><a class="filter">filter</a></li>
+            <li><a class="custom-render">custom render</a></li>
+            <li><a class="long-text">long text</a></li>
+            <li><a class="dragdrop">dragdrop</a></li>
+            <li><a class="horizontal">horizontal</a></li>
+            <li><a class="half-ticked-list">half ticked list</a></li>
+            <li><a class="virtual-mode">virtual mode</a></li>
+            <!--<li><a class="bigdata">big data test</a></li>-->
+            <li><a class="error-test">operations on non existantant controls</a></li>
+	    </ul>
+
+    </div>
+
+    <div class="right-panel">
+
+        <table class="menu">
+            <tr>
+                <td class="active"><a href="#" data-op="demo">Demo</a></td>
+                <td><a href="#" data-op="source">Source</a></td>
+                <td><a href="#" data-op="api">API</a></td>
+            </tr>
+        </table>
+
+        <div class="content">
+
+            <div class="demo-panel">
+
+                <div class="widget"></div> 
+
+                <div class="non-widget"></div> 
+
+                <div class="searchbox"></div>                
+
+                <br />
+
+                <div class="status"></div>
+
+                <p>functions</p>
+
+                <table class="op"></table>
+
+            </div>
+
+            <div class="source-panel"></div>
+
+            <div class="api-panel">
+
+                <table class="api-table"></table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

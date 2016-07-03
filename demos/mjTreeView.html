@@ -1,0 +1,825 @@
+﻿<!doctype html>
+<html>
+
+<head>
+
+<title>Treeview</title>
+
+
+<meta name="keywords" content="jquery tree control, tree" /> 
+<meta name="description" content="mjTools treeview." />
+
+<style>
+
+    .demo .widget { width: 200px; height: 250px; }
+    .searchbox { width: 200px; }
+    .searchbox .mj-searchbox input { border-radius: 0px; }
+    .source-panel { display: none; }
+    .api-panel { display: none; }
+
+</style>
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjTreeView.js"></script>
+<script src="../js/mjSearchBox.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../js/libs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+<script src="../js/libs/jquery-ui-1.11.4.custom/jquery-ui.min.js" ></script>
+
+<script src="../js/libs/nested-sortable/jquery.mjs.nestedSortable.js" ></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        function message(msg) { $(".status").html(msg); }
+
+        function fillFunctionTable(json)
+        {
+            $(".op").empty();
+
+            var i = 0; 
+
+            while (i < json.length)
+            {
+                var tr = $("<tr>");
+
+                for (var j = 0; j < 3 && i < json.length; j++)
+                {
+                    var o = json[i++];
+
+                    var td = $("<td><a href='#' data-op='" + o.op + "' >" + o.text + "</a>");
+                    td.data(o.val);
+
+                    tr.append(td);
+                    
+                }
+                
+                $(".op").append(tr);
+            }
+
+            rebind();
+        }
+
+        $(".examples li").click(function (e) {
+
+            e.preventDefault();
+
+            $(".examples li.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+        $(".menu td").click(function (e) {
+
+            e.preventDefault();
+
+            $(".menu td.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+
+        $(".menu a").click(function (e) {
+
+            e.preventDefault();
+
+            var op = $(e.currentTarget).attr("data-op");
+
+            $(".demo-panel").hide();
+            $(".source-panel").hide();
+            $(".api-panel").hide();
+
+            var api = [{ name: "getChildren(id)", description: "" },
+                        { name: "hasChanged()", description: "" },
+                        { name: "getItem(id)", description: "" },
+                        { name: "clear()", description: "" },
+                        { name: "search(search_function)", description: "" },
+                        { name: "enableAll()", description: "" },
+                        { name: "disableAll()", description: "" },
+                        { name: "enable(id)", description: "" },
+                        { name: "disable(id)", description: "" },
+                        { name: "toggle(id)", description: "" },
+                        { name: "checkAll()", description: "" },
+                        { name: "uncheckAll()", description: "" },
+                        { name: "check(id, check_parents)", description: "" },
+                        { name: "uncheck(id)", description: "" },
+                        { name: "checkAt(n)", description: "" },
+                        { name: "uncheckAt(n)", description: "" },
+                        { name: "getChecked()", description: "" },
+                        { name: "halfTick(id)", description: "" },
+                        { name: "halfTickAt(n)", description: "" },
+                        { name: "halfTickAll()", description: "" },
+                        { name: "deselectHalfTicked()", description: "" },
+                        { name: "selectParent(id)", description: "" },
+                        { name: "select(id)", description: "" },
+                        { name: "deselect(id)", description: "" },
+                        { name: "getSelected()", description: "" },
+                        { name: "selectAll()", description: "" },
+                        { name: "deselectAll()", description: "" },
+                        { name: "selectAt(n)", description: "" },
+                        { name: "deselectAt(n)", description: "" },
+                        { name: "getTree()", description: "" },
+                        { name: "toArray()", description: "" },
+                        { name: "toTree()", description: "" },
+                        { name: "sort(callback)", description: "" },
+                        { name: "getSiblings(id)", description: "" },
+                        { name: "addBefore(id, data)", description: "" },
+                        { name: "addAfter(id, data)", description: "" },
+                        { name: "addRootNode(data)", description: "" },
+                        { name: "addChild(id, data)", description: "" },
+                        { name: "update(id, data)", description: "" },
+                        { name: "remove(id)", description: "" },
+                        { name: "expand(id)", description: "" },
+                        { name: "collapse(id)", description: "" },
+                        { name: "expandAll()", description: "" },
+                        { name: "collapseAll()", description: "" },
+                        { name: "close()", description: "" },
+                        { name: "scrollTo(n, animate)", description: "" }];
+
+            switch (op)
+            {
+                case "demo":
+
+                    $(".demo-panel").show();
+                    break;
+
+                case "source":
+
+                    $(".source-panel").show();
+                    break;
+
+                case "api":
+
+                    $(".api-panel").show();
+
+                    var str = "";
+
+                    $.each(api, function (index, o) {
+
+                        str += "<tr><td>" + o.name + "</td></tr>";
+                    });
+
+                    $(".api-table").html(str);
+                    
+                    break;                    
+            }
+        });
+
+        function rebind() {
+
+            $(".op a").click(function (e) {
+
+                e.preventDefault();
+
+                var op = $(e.currentTarget).attr("data-op");
+
+                var val = $(e.currentTarget).parent().data();
+
+                message("");
+
+                var selected = $(".widget").mjTreeView("getSelected");
+
+                switch (op) {
+
+                    case "getItem":
+
+                        var o = $(".widget").mjTreeView(op, "dogs");
+
+                        if (o)
+                            message("item:" + o.text);
+                        else
+                            message("item not found");
+
+                        break;
+
+                    case "getChecked":
+                    case "getSelected":
+
+                        var arr = $(".widget").mjTreeView(op);
+
+                        var res = [];
+
+                        for (var i = 0; i < arr.length; i++)
+                            res.push(arr[i].text);
+
+                        message(res.join());
+                        break;
+
+                    case "addBefore":
+                    case "addAfter":
+                    case "addChild":
+
+                        if (selected.length > 0)
+                            $(".widget").mjTreeView(op, selected[0].id, val);
+                        else
+                            message("nothing selected");
+
+                        break;
+
+                    case "expand":
+                    case "collapse":
+                    case "remove":
+
+                        if (selected.length > 0)
+                            $(".widget").mjTreeView(op, selected[0].id);
+                        else
+                            message("nothing selected");
+
+                        break;
+
+                    case "getChildren":
+                    case "getSiblings":
+
+                        if (selected.length > 0) {
+
+                            var arr = $(".widget").mjTreeView(op, selected[0].id);
+
+                            var res = [];
+
+                            for (var i = 0; i < arr.length; i++)
+                                res.push(arr[i].text);
+
+                            message(res.join());
+                        }
+                        break;
+
+                    default:
+
+                        var res = $(".widget").mjTreeView(op, val);
+                        message(res);
+                        break;
+                }
+            });
+
+        }
+
+        //function buildHierarchy(items) {
+
+        //    var self = this;
+
+        //    // build the hierarchy
+        //    // add array of child nodes (items) to each node
+
+        //    $.each(items, function (index, o) {
+
+        //        // destroy any existing hierarchy
+
+        //        o.items = [];
+        //    });
+
+        //    $.each(items, function (index, o) {
+
+        //        if (o.pid != undefined && o.pid != null) {
+
+        //            var p = self.getItem(o.pid);        // get parent
+
+        //            if (p) {
+
+        //                //if (!p.items)
+        //                //   p.items = [];
+
+        //                p.items.push(o);
+        //            }
+        //            else {
+        //                // parent does not exists
+        //                // error in data or node appears before its parent
+
+        //                if (window.console) {
+        //                    try { console.log("mjTreeView.buildHierarchy: error in data, parent node " + o.pid + " not found."); } catch (e) { }
+        //                }
+        //            }
+        //        }
+        //    });
+        //}
+
+        function getOps(type)
+        {
+            var data;
+
+            switch (type)
+            {
+                case "text":
+
+                    data = [{ op: 'getSelected', text: 'get selected' },
+                               { op: 'selectAll', text: 'select all' },
+                               { op: 'deselectAll', text: 'deselect all' },
+                               { op: 'select', text: 'select item id=15', val: 15 },
+                               { op: 'deselect', text: 'deselect item id=15', val: 15 },
+                               { op: 'selectAt', val: 2, text: 'select item 2' },
+                               { op: 'deselectAt', val: 2, text: 'deselect item 2' },
+
+                               { op: 'addBefore', text: 'add before', val: { text: "James Blake", image: "images/test.png" } },
+                               { op: 'addAfter', text: 'add after', val: { text: "Uriah Heap", image: "images/test.png" } },
+                               { op: 'addChild', text: 'add child item', val: { text: "Deep Purple", image: "images/test.png" } },
+
+                               { op: 'remove', text: 'remove' },
+
+                               { op: 'clear', text: 'clear' },
+                               { op: 'addRootNode', text: 'add new root node', val: { text: "James Blake", image: "images/test.png" } },
+
+                               { op: 'disableAll', text: 'disableAll' },
+                               { op: 'enableAll', text: 'enableAll' },
+                               { op: 'close', text: 'close' },
+                               { op: 'hasChanged', text: 'has Changed' },
+                               { op: 'expand', text: 'expand' },
+                               { op: 'collapse', text: 'collapse' },
+                               { op: 'expandAll', text: 'expand all' },
+                               { op: 'collapseAll', text: 'collapse all' },
+                               { op: 'getChildren', text: 'get children' },
+                               { op: 'getSiblings', text: 'get siblings' },
+                               { op: 'sort', text: 'sort' },
+                               { op: 'toTree', text: 'toTree' }];
+                    break;
+
+                case "checkboxes":
+
+                    data = [{ op: 'getItem', text: 'get item dogs' },
+                    { op: 'getChecked', text: 'get checked' },
+                    { op: 'checkAll', text: 'check all' },
+                    { op: 'uncheckAll', text: 'uncheck all' },
+                    { op: 'checkAt', text: 'check item 4', val: 4 },
+                    { op: 'uncheckAt', text: 'uncheck item 4', val: 4 },
+                    { op: 'halfTickAll', text: 'halfTickAll' },
+                    { op: 'halfTickAt', text: 'halfTickAt item 4', val: 4 }];
+                    break;
+            }
+
+            return data;
+        }
+
+        function getData(type)
+        {
+            var data;
+
+            switch (type) {
+                case "shakespere":
+
+                    data = [{ text: "This life, which had been the tomb of his virtue and of his honour, is but a walking shadow." },
+                                { text: "Good night, good night! Parting is such sweet sorrow, that I shall say good night till it be morrow.", items: [
+                                        { text: "A fool thinks himself to be wise, but a wise man knows himself to be a fool." },
+                                        { text: "There is a tide in the affairs of men, Which taken at the flood, leads on to fortune. Omitted, all the voyage of their life is bound in shallows and in miseries. On such a full sea are we now afloat. And we must take the current when it serves, or lose our ventures." }
+                                    ]}
+
+                    ];
+                    break;
+
+                case "cars":
+
+                    data = [{
+                        text: "Car", image: "images/test.png", items: [
+                          { text: "Toyota", items: [{ text: "Camry" }, { text: "Rav 4" }, { text: "Land Cruiser" }] },
+                          { text: "Mini", items: [{ text: "Clubman" }, { text: "2 door" }, { text: "Minor" }] },
+                          { text: "Ford" }]
+                        },
+
+                        { text: "Milk", image: "images/test.png", items: [{ text: "Full Cream" }, { text: "Lite" }, { text: "Goat" }, { text: "Low Fat" }] }
+                    ];
+                    break;
+
+                case "guitars":
+
+                    data = [ { text: "Fender", image: "images/test.png", items: [{
+                                            text: "Stratocaster", items: [
+                                                { text: "Colors", items: [{ text: "Sunburst" }, { text: "White" }] },
+                                                { text: "Pickups", items: [{ text: "standard single coil" }, { text: "EMG" }] }
+                                        ]},
+
+                                        { text: "Telecaster" },
+                                        { text: "Jaguar", items: [{ text: "Rosewood" }, { text: "Sunburst" }, { text: "Turquoise" }, { text: "Black" }] },
+                                        { text: "Acoustic" }]
+                                },
+
+                                { text: "Gibson", image: "images/test.png", items: [{ text: "SG" }, { text: "Les Paul" }, { text: "335" }, { text: "Flying V" }, { text: "Robot" }] },
+                                { text: "empty node" }
+                    ];
+                    break;
+
+                case "accessories":
+
+                    data = [{text: "Automotive", items: [
+                              { text: "Accessories", items: [{ text: "Caravan/Trailer" }, { text: "Other" }] },
+                              { text: "Car Dealers", items: [{ text: "Independent Dealer" }, { text: "Manufacturer Network" }] } ]
+                            },
+
+                            {
+                                text: "Clothing and Accessories", items: [
+                                  { text: "Accessories", items: [{  text: "Jewelery" }, {  text: "Range" }, {  text: "Watches" }, {  text: "Sunglasses" }] },
+                                  {  text: "Clothing", items: [{  text: "Mens Wear" }, {  text: "Range" }, {  text: "Safety and Work Wear" }, {  text: "Womens Wear" }] }
+                                ]
+                            }];
+                    break;
+
+                case "hotels":
+
+                    data = [ {  text: "Hotels", items: [
+                                    {  text: "Accor", items: [{  text: "Ibis" }, {  text: "Novotel" }, {  text: "Formula 1" }] },
+                                    {  text: "Marriot" },
+                                    {  text: "Club Med", items: [{  text: "Rydges" }, {  text: "Best Western" }, {  text: "Holiday Inn" }] },
+                                    {  text: "Hyatt" }]
+                                },
+
+                                {  text: "empty node" }];
+                    break;
+
+
+                case "flat":
+
+                    data = [{ id: 0, pid: null, text: "Fender", image: "images/test.png" },
+
+                                             { id: 1, pid: 0, text: "Stratocaster" },
+                                             { id: 2, pid: 1, text: "Colors" },
+                                             { id: 3, pid: 2, text: "Sunburst" },
+                                             { id: 4, pid: 2, text: "White" },
+                                             { id: 5, pid: 1, text: "Pickups" },
+                                             { id: 6, pid: 5, text: "standard single coil" },
+                                             { id: 7, pid: 5, text: "EMG" },
+
+                                             { id: 8, pid: 0, text: "Telecaster" },
+
+                                             { id: 9, pid: 0, text: "Jaguar" },
+                                             { id: 10, pid: 9, text: "Rosewood" },
+                                             { id: 11, pid: 9, text: "Sunburst" },
+                                             { id: 12, pid: 9, text: "Turquoise" },
+                                             { id: 13, pid: 9, text: "Black" },
+
+                                             { id: 14, pid: null, text: "Acoustic" },
+                                             { id: 15, pid: 14, text: "Martin" },
+                                             { id: 16, pid: 14, text: "Takaminie" },
+
+                                             { id: 17, pid: null, text: "Gibson", image: "images/test.png" },
+                                             { id: 18, pid: 17, text: "SG" },
+                                             { id: 19, pid: 17, text: "Les Paul" },
+                                             { id: 20, pid: 17, text: "335" },
+                                             { id: 21, pid: 17, text: "Flying V" },
+                                             { id: 22, pid: 17, text: "Robot" }];
+                    break;
+
+                default:
+
+                    data = [
+                        {
+                            text: "Computers", items: [
+
+                                  { text: "Laptops", items: [{ text: "Dell" }, { text: "Sony" }, { text: "IBM" }, { text: "Samsung" }, { text: "Hewlett Packard" }] },
+                                  { text: "Desktops", items: [{ text: "Compac" }, { text: "Apple" }, { text: "Lenovo" }, { text: "Dell" }] }]
+                        },
+
+                        { text: "Phones", items: [{ text: "Apple" }, { text: "HTC" }, { text: "Ericson" }, { text: "Samsung" }] },
+                        { text: "Colors", items: [] },
+                        { text: "Tablets", items: [{ text: "ipad" }, { text: "Surface" }, { text: "samsung" }] },
+                    ];
+                    break;
+            }
+
+            return data;
+        }
+
+        $(".basic").click(function (e) {
+
+            var ops = getOps("text");
+            fillFunctionTable(ops);
+            var items = getData();
+            $(".widget").mjTreeView({ items: items });
+
+            $(".widget").on("selected", function (e, d) { message(d.text + " selected"); });
+        });
+
+        $(".checklist").click(function (e) {
+
+            var ops = getOps("checkboxes");
+            fillFunctionTable(ops);
+            var items = getData("guitars");
+            $(".widget").mjTreeView({ items: items, show_checkboxes: true });
+
+            $(".widget").on("checkChange", function (e, d) {
+
+                if (d.checked == 1)
+                    message(d.text + " checked");
+                else
+                    message(d.text + " unchecked");
+            });
+        });
+
+        $(".flat-data").click(function (e) {
+
+            var ops = getOps("checkboxes");
+            fillFunctionTable(ops);
+            var items = getData("flat");
+            $(".widget").mjTreeView({ items: items, data_type: "flat", show_checkboxes: true });
+
+            $(".widget").on("checkChange", function (e, d) {
+
+                if (d.checked == 1)
+                    message(d.text + " checked");
+                else
+                    message(d.text + " unchecked");
+            });
+        });
+
+        $(".long-text").click(function (e) {
+
+            var ops = getOps("text");
+            fillFunctionTable(ops);
+            var items = getData("shakespere");
+            $(".widget").mjTreeView({ items: items, show_checkboxes: true });
+        });
+
+        $(".dragdrop").click(function (e) {
+
+            var ops = getOps("text");
+            fillFunctionTable(ops);
+            var items = getData();
+            $(".widget").mjTreeView({ items: items, dragdrop: true });
+
+            $(".widget").on("selected", function (e, d) { message(d.text + " selected"); });
+        });
+
+        /*
+        filter: function (str) {
+
+            var self = this;
+
+            //str = str.toLowerCase();
+
+            //// set visible to false
+
+            //var arr = this.toArray();
+
+            //for (var i = 0; i < arr.length; i++) {
+
+            //    var o = arr[i];
+
+            //    if (o.text.toLowerCase().indexOf(str) >= 0) {
+
+            //        // its a match
+
+            //        // mark all children as visible
+
+            //        self._recurseDown(o, function (x) { x.visible = true; });
+
+            //        // need to display parents of any matching node
+
+            //        self._recurseUp(o, function (x) { x.visible = true; });
+            //    }
+            //}
+
+            var tree = this.toTree();
+
+            var e = this.$el.find(".mj-root");
+
+            e.empty();
+           
+            this._redraw(e, tree);
+        },
+        */
+
+        $(".filter").click(function (e) {
+
+            var items = getData("cars");
+
+            $(".widget").mjTreeView({ items: items, show_checkboxes: true });
+            $(".searchbox").mjSearchBox();
+
+            $(".searchbox").on("mjKeyup", function (e, data) {
+                message("keyup: " + data);
+
+                $(".widget").mjTreeView("filter", data);
+            });
+
+            $(".searchbox").on("search", function (e, data) {
+                message("search: " + data);
+
+                $(".widget").mjTreeView("filter", data);
+            });
+        });
+
+        
+
+        function itemRenderFunction(o)
+        {
+            var str = "<div><span class='mj-text'>Coca Cola</span></div>";
+            str += "<div class='links' style='position:absolute; right:0px;'>";
+            str += "<a href='#' class='edit' data-id='" + o.id + "'><img src='images/edit.png' style='width: 15px;'/></a>";
+            str += "<a href='#' class='delete' data-id='" + o.id + "'><img src='images/delete.png' style='width: 15px;'/></a>";
+            str += "</div>";
+
+            return str;
+        }
+
+        $(".custom").click(function (e) {
+
+            var items = getData("hotels");
+            var data2 = getData("computers");
+
+            $(".widget").mjTreeView({ items: items, show_checkboxes: true, itemRenderFunction: itemRenderFunction });
+            $(".widget").mjTreeView("close");
+
+            $(".edit").on("click", function (e) {
+
+                e.stopPropagation();
+
+                var d = $(e.currentTarget).attr("data-id");
+            });
+
+            $(".delete").on("click", function (e) {
+
+                e.stopPropagation();
+
+                var d = $(e.currentTarget).attr("data-id");
+            });
+        });
+
+        $(".ljtree").click(function (e) {
+
+            var data = getData("accessories");
+
+            $(".widget").mjTreeView({ items: data, show_checkboxes: true, recursive: false });
+
+            //var nodes = $(".widget").mjTreeView("getAll");
+
+            //for (var i = 0; i < data.length; i++) 
+            //{
+            //$(".widget").mjTreeView("halfTick", data[i].id);
+            //}
+
+            $(".widget").mjTreeView("halfTickAll");
+
+            $(".widget").on("checkChange", function (e, d) {
+
+                var checked = $(".widget").mjTreeView("getChecked");
+
+                if (checked.length == 0) {
+
+                    // nothing selected
+
+                    $(".widget").mjTreeView("halfTickAll");
+                    self.nothing_selected = true;
+                }
+                else
+                    if (self.nothing_selected && checked.length == 1) {
+
+                        $(".widget").mjTreeView("uncheckAll");
+                        $(".widget").mjTreeView("check", data.id);
+
+                        self.nothing_selected = false;
+                    }
+
+
+                message("...id: " + d.id + " checked = " + d.checked);
+
+                var siblings = $(".widget").mjTreeView("getSiblings", d.id);
+
+                var count = 0;
+
+                $.each(siblings, function (index, n) {
+
+                    if (n.checked == 1)
+                        count++;
+                });
+
+                if (d.checked == 1) {
+                    // if no other siblings are selected, deselect other siblings
+
+                    // only 1 ticked which is ourself
+
+                    if (count == 0) {
+                        $.each(siblings, function (index, n) {
+
+                            if (n.id != d.id)
+                                $(".widget").mjTreeView("uncheck", n.id);
+                        });
+                    }
+                }
+                else
+                    if (d.checked == 0) {
+                        // we deselected something
+
+                        // if no other siblings are selected, deselect other siblings
+
+                        if (count == 0) {
+                            // half tick all siblings including ourself
+
+                            $(".widget").mjTreeView("halfTick", d.id);
+
+                            $.each(siblings, function (index, n) {
+                                $(".widget").mjTreeView("halfTick", n.id);
+                            });
+                        }
+                    }
+
+                // now deselect parents which have not been specifically ticked
+
+                var p = $(".widget").mjTreeView("getItem", d.pid);
+
+                if (d.checked == 1) {
+                    while (p) {
+                        //var node = $(".widget").mjTreeView("getData", parent.id);
+                        $(".widget").mjTreeView("check", p.id);
+                        var p = $(".widget").mjTreeView("getItem", p.pid);
+                    }
+                }
+                else {
+                    /*
+                    while (parent)
+                    {
+                        var node = $("#ljtree").mjTreeView("get", parent.id);
+                        $("#ljtree").widget("deselect", node.id);
+                        var parent = $("#ljtree").mjTreeView("getParent", node.id);
+                    } 
+                    */
+                }
+            });
+
+            $(".getSelected").click(function (e) {
+
+                e.preventDefault();
+                var arr = $(".widget").mjTreeView("getSelected");
+
+                var selected = [];
+
+                for (var i = 0; i < arr.length; i++)
+                    selected.push(arr[i].id);
+
+                message(selected.join());
+            });
+
+        });
+
+        $(".basic").click();
+
+    });
+
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div class="left-panel">
+
+        <br />
+
+	    <ul class=" vertical-menu examples">
+            <li><strong>examples</strong></li>
+		    <li class="active"><a href="#" class="basic">basic</a></li>
+            <li><a href="#" class="checklist">checklist</a></li>
+            <li><a href="#" class="flat-data">flat data</a></li>
+            <li><a href="#" class="filter">filter</a></li>
+            <li><a href="#" class="custom">custom render</a></li>
+		    <li><a href="#" class="ljtree">lj tree</a></li>
+            <li><a href="#" class="long-text">long text</a></li>
+            <li><a href="#" class="dragdrop">dragdrop</a></li>
+	    </ul>
+
+    </div>
+
+    <div class="right-panel">
+
+        <table class="menu">
+            <tr>
+                <td class="active"><a href="#" data-op="demo">Demo</a></td>
+                <td><a href="#" data-op="source">Source</a></td>
+                <td><a href="#" data-op="api">API</a></td>
+            </tr>
+        </table>
+
+        <div class="content">
+
+            <div class="demo-panel">
+       
+                <div class="widget"></div> 
+
+                <div class="searchbox"></div>                
+
+                <br />
+
+                <div class="status"></div>
+
+                <p>functions</p>
+
+                <table class="op"></table>
+
+            </div>
+
+            <div class="source-panel"></div>
+
+            <div class="api-panel">
+
+                <table class="api-table"></table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

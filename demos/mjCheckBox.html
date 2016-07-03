@@ -1,0 +1,203 @@
+﻿<!doctype html>
+<html>
+<head>
+<title>mjCheckBox</title>
+
+<meta name="keywords" content="jquery checkbox" /> 
+<meta name="description" content="mjTools checkbox." />
+
+<style>
+
+    .demo .widget { width: 200px; height: 50px; }
+
+    .source-panel { display: none; }
+
+    .api-panel { display: none; }
+
+</style>
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="../css/themes/blackAndWhite.css">
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjCheckBox.js"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        function message(msg) { $(".status").html(msg); }
+
+        function fillFunctionTable(json) {
+
+            $(".op").empty();
+
+            var i = 0;
+
+            while (i < json.length) {
+                var tr = $("<tr>");
+
+                for (var j = 0; j < 3 && i < json.length; j++) {
+                    var o = json[i++];
+
+                    var td = $("<td><a href='#' data-op='" + o.op + "' >" + o.text + "</a>");
+                    td.data(o.val);
+
+                    tr.append(td);
+                }
+
+                $(".op").append(tr);
+            }
+        }
+
+        $(".examples a").click(function (e) {
+
+            e.preventDefault();
+
+            $(".examples .active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+        $(".menu a").click(function (e) {
+
+            e.preventDefault();
+
+            var op = $(e.currentTarget).attr("data-op");
+
+            $(".demo-panel").hide();
+            $(".source-panel").hide();
+            $(".api-panel").hide();
+        });
+
+        $(".op li a").click(function (e) {
+
+            e.preventDefault();
+
+            var op = $(e.currentTarget).attr("data-op");
+
+            message(op);
+            message($("#checkbox1").mjCheckBox(op));
+        });
+
+        $(".checkbox1").mjCheckBox({ text: "America", checked: 1, disabled: false, data: { x: 123, name: "rob" } });
+
+        $(".checkbox1").on("change", function (e, data) {
+            console.log(data);
+            message(data.text + " checked = " + data.checked);
+        });
+
+        $(".checkbox2").mjCheckBox({ text: "Canada", checked: 0, disabled: false, data: { x: 456, name: "jane" } });
+
+        $(".checkbox2").on("change", function (e, data) {
+            console.log(data);
+            message(data.text + " checked = " + data.checked);
+        });
+
+        $(".checkbox3").mjCheckBox({ text: "France", checked: 0, disabled: true, data: { x: 789, name: "elvis" } });
+
+        $(".checkbox3").on("change", function (e, data) {
+            console.log(data);
+            message(data.text + " checked = " + data.checked);
+        });
+
+        $(".checkbox4").mjCheckBox({ text: "Australia in the Southern Hemisphere of the Planet", checked: 0, disabled: false, image: "images/britany.jpg", data: { x: 789, name: "elvis" } });
+
+        $(".checkbox4").on("change", function (e, data) {
+            console.log(data);
+            message(data.text + " checked = " + data.checked);
+        });
+
+        var ops = [{ op: 'check', text: "check" },
+                    { op: "uncheck", text: "uncheck" },
+                    { op: "disable", text: "disable" },
+                    { op: "enable", text: "enable" },
+                    { op: "val", text: "val" },
+                    { op: "halfTick", text: "half tick" },
+                    { op: "close", text: "close" },
+                    { op: "hasChanged", text: "has Changed" }];
+
+        fillFunctionTable(ops);
+
+        $("a[data-op]").click(function (e) {
+
+            e.preventDefault();
+
+            var op = $(this).attr("data-op");
+
+            e = $(".checkbox1");
+            
+            var msg = e.mjCheckBox(op);
+            message("op = " + op + " val = " + msg);
+        });
+    });
+
+   
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div class="left-panel">
+
+        <br />
+
+        <ul class="vertical-menu examples">
+		    <li><a class="checkbox active">checkbox</a></li>
+	    </ul>
+
+    </div>
+
+    <div class="right-panel">
+
+        <table class="menu">
+            <tr>
+                <td class="active"><a href="#" data-op="demo">Demo</a></td>
+                <td><a href="#" data-op="source">Source</a></td>
+                <td><a href="#" data-op="api">API</a></td>
+            </tr>
+        </table>
+
+        <div class="content">
+       
+            <div class="demo-panel">
+
+                <div class="checkbox1" style="float: left;"></div> 
+                <div class="checkbox2" style="float: left;"></div>
+            
+                <div class="checkbox3" ></div>
+                <div class="checkbox4" ></div>    
+            
+                <div class="status"></div>    
+
+                <p>functions</p>
+
+                <table class="op"></table>
+         
+            </div>
+
+            <div class="source-panel"></div>
+
+            <div class="api-panel">
+
+                <table class="api-table"></table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>  <!-- wrapper -->
+
+</body>
+</html>
+
+
+

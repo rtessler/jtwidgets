@@ -1,0 +1,117 @@
+﻿<!doctype html>
+<html>
+<head>
+<title>mjSearchBox</title>
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjSearchBox.js"></script>
+
+<style>
+
+    .searchbox { width: 250px; }
+
+</style>
+
+<script>
+
+    $(document).ready(function () {
+
+        function message(msg) {
+            console.log(msg);
+            $("#status").html(msg);
+        }
+
+        // events
+
+        $("#sidepanel ul li a").click(function (e) {
+
+            e.preventDefault();
+
+            $(e.target).parent().parent().find(".active").removeClass("active");
+            $(e.target).addClass("active");
+
+            var id = $(e.target).attr("data-id");
+
+            var options = {};
+
+            switch (id) {
+                case "basic":
+
+                    options = {  };
+                    break;
+            }
+
+            $(".searchbox").mjSearchBox(options);
+
+            $(".searchbox").on("mjKeyup", function (e, data) {
+                message("keyup: " + data);
+            });
+
+            $(".searchbox").on("search", function (e, data) {
+                message("search: " + data);
+            });
+        });
+
+        $(".controls a").click(function (e) {
+
+            e.preventDefault();
+
+            var op = $(e.currentTarget).attr("data-op");
+
+            switch (op) {               
+
+                case "clear":
+
+                    $(".searchbox").mjSearchBox("clear");
+                    break;
+
+                case "close":
+
+                    $(".searchbox").mjSearchBox("close");
+                    break;
+            }
+        });
+
+        $(".basic").click();
+    });
+
+
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div id="sidepanel">
+	    <ul>
+		    <li><a class="basic active" data-id="basic">basic</a></li>
+
+	    </ul>
+
+        <h4>functions</h4>
+
+        <ul class="controls">
+            <li><a href="#" data-op="clear">clear</a></li>
+            <li><a href="#" data-op="close">close</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+       
+        <div class="searchbox"></div>
+
+        <div id="status"></div>
+
+    </div>
+
+</div>  <!-- wrapper -->
+
+</body>
+</html>

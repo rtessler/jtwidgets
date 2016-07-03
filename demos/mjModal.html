@@ -1,0 +1,258 @@
+﻿<!doctype html>
+<html>
+<head>
+
+<title>mjModal</title>
+
+<meta name="keywords" content="jquery tree control, tree" /> 
+<meta name="description" content="mjTools treegrid." />
+
+<style>
+
+    .demo .widget { width: 500px; height: 250px; }
+
+    .source-panel { display: none; }
+
+    .api-panel { display: none; }
+
+</style>
+
+
+<script src="../js/libs/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" type="text/css" href="../css/mjAll.css">
+<script src="../js/mjCore.js"></script>
+<script src="../js/mjModal.js"></script>
+<script src="../js/mjListBox.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        function message(msg) { $(".status").html(msg); }
+
+        function fillFunctionTable(json) {
+
+            $(".op").empty();
+
+            var i = 0;
+
+            while (i < json.length) {
+                var tr = $("<tr>");
+
+                for (var j = 0; j < 3 && i < json.length; j++) {
+                    var o = json[i++];
+
+                    var td = $("<td><a href='#' data-op='" + o.op + "' >" + o.text + "</a>");
+                    td.data(o.val);
+
+                    tr.append(td);
+                }
+
+                $(".op").append(tr);
+            }
+        }
+       
+        $(".examples li").click(function (e) {
+
+            e.preventDefault();
+
+            $(".examples li.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+        $(".menu td").click(function (e) {
+
+            e.preventDefault();
+
+            $(".menu td.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+        });
+
+        $(".menu a").click(function (e) {
+
+            e.preventDefault();
+
+            var op = $(e.currentTarget).attr("data-op");
+
+            $(".demo-panel").hide();
+            $(".source-panel").hide();
+            $(".api-panel").hide();
+
+            var api = [
+                        { name: "clear()", description: "" }];
+
+            switch (op) {
+                case "demo":
+
+                    $(".demo-panel").show();
+                    break;
+
+                case "source":
+
+                    $(".source-panel").show();
+                    break;
+
+                case "api":
+
+                    $(".api-panel").show();
+
+                    var str = "";
+
+                    $.each(api, function (index, o) {
+
+                        str += "<tr><td>" + o.name + "</td></tr>";
+                    });
+
+                    $(".api-table").html(str);
+
+                    break;
+            }
+        });
+
+        // events
+
+        $(".examples a").click(function (e) {
+
+            e.preventDefault();
+
+            $(e.target).parent().parent().find(".active").removeClass("active");
+            $(e.target).addClass("active");
+        });
+
+        function rebind() {
+
+            $("a[data-op]").click(function (e) {
+
+                e.preventDefault();
+
+                var op = $(this).attr("data-op");
+
+                switch (op) {
+                    case "close":
+                    case "getSelected":
+
+                        $(".widget").mjModal(op);
+                        break;
+
+                   
+                    default:
+
+                        $(".widget").mjModal(op);
+                        break;
+                }
+            });
+        }
+
+
+        $(".basic").click(function (e) {
+
+            //var html = "basic";
+
+            var data = {items: [{ text: "abc" }, { text: "def" }, { text: "ghi" }], type: "checkbox"};
+
+            //var html = $("<div>", { html: "basic" });
+            //var list = $("<div>", {class: "mylist"});        
+            //list.mjListBox(data);
+            //html.append(list);
+            //$(".widget").mjModal({ html: html.html(), show_background: false });
+
+            var html = "<div>basic</div><div class='list'></div>";
+            $(".widget").mjModal({ html: html, show_background: false });
+            $(".list").mjListBox(data);
+        });
+
+        $(".custom").click(function (e) {
+
+            var html = "";
+
+            html += "<div class='mj-header'>";
+
+            html += "<a class='mj-close-btn'>x</a>";
+
+            html += "<h3>Settings</h3>";
+
+            html += "</div>";
+
+            html += "<div class='mj-body'>this is the body</div>";
+
+            html += "<div class='mj-footer'>";
+            html += "<a class='mj-close-btn'>Close</a>";
+            html += "</div>";
+
+            $(".widget").mjModal({ custom_html: html });
+        });
+
+        var ops = [{ op: 'close', text: 'close' }];
+
+        fillFunctionTable(ops);
+
+        rebind();
+
+        $(".basic").click();
+    });
+
+</script>
+
+</head>
+
+<body>
+
+<div class="demo wrapper">
+
+    <div class="left-panel">
+
+        <br />
+
+	    <ul class="vertical-menu examples">
+            <li><strong>examples</strong></li>
+		    <li><a class="basic active">basic</a></li>
+            <li><a class="custom" >custom</a></li>
+	    </ul>
+
+    </div>
+
+    <div class="right-panel">
+
+        <table class="menu">
+            <tr>
+                <td class="active"><a href="#" data-op="demo">Demo</a></td>
+                <td><a href="#" data-op="source">Source</a></td>
+                <td><a href="#" data-op="api">API</a></td>
+            </tr>
+        </table>
+
+        <div class="content">
+
+            <div class="demo-panel">
+
+                <div class="widget"></div>               
+
+                <br />
+
+                <div class="status" style="position: relative; z-index:900;"></div>
+
+                <p>functions</p>
+
+                <table class="op"></table>
+
+            </div>
+
+            <div class="source-panel"></div>
+
+            <div class="api-panel">
+
+                <table class="api-table"></table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
